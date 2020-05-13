@@ -1,0 +1,5 @@
+#!/bin/sh
+
+shadow-cljs release main
+cp resources/public/index.html docs
+cp resources/public/ui/main.js docs/ui
