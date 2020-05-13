@@ -1,6 +1,6 @@
 ;; shadow-cljs configuration
 {:deps
- {:aliases []}
+ {:aliases [:dev]}
 
  :dev-http
  {3875 "classpath:public"}

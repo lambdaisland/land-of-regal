@@ -1,5 +1,10 @@
 {:paths ["src" "resources"]
- :deps  {lambdaisland/regal   {:git/url "https://github.com/lambdaisland/regal"
-                               :sha "dbe79dacefbe472a8da531103df659862319ec3d"}
-         reagent              {:mvn/version "1.0.0-alpha2"}
-         thheller/shadow-cljs {:mvn/version "2.9.2"}}}
+ :deps  {lambdaisland/regal          {:git/url "https://github.com/lambdaisland/regal"
+                                      :sha     "dbe79dacefbe472a8da531103df659862319ec3d"}
+         reagent                     {:mvn/version "1.0.0-alpha2"}
+         thheller/shadow-cljs        {:mvn/version "2.9.2"}
+         garden                      {:mvn/version "1.3.9"}
+         lambdaisland/garden-watcher {:mvn/version "0.3.5"}}
+
+ :aliases
+ {:dev {:extra-paths ["dev"]}}}
