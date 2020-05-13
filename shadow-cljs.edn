@@ -1,0 +1,15 @@
+;; shadow-cljs configuration
+{:deps
+ {:aliases []}
+
+ :dev-http
+ {3875 "classpath:public"}
+
+ :builds
+ {:main
+  {:target     :browser
+   :output-dir "resources/public/ui"
+   :modules    {:main {:entries [lambdaisland.regal-playground]}}
+   :asset-path "/ui"
+   :devtools   {:repl-pprint true}
+   }}}
