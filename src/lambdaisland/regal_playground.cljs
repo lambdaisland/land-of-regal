@@ -37,43 +37,51 @@
 
 (defn app []
   (let [{:keys [regal parse-error? flavor input pattern result]} @state]
-    [:div
-     [:h2 "Regal form"]
-     (when parse-error?
-       [:p "Parse error!"])
-     [:textarea {:value regal
-                 :on-change
-                 (fn [e]
-                   (swap! state
-                          (fn [state]
-                            (let [text (.. e -target -value)]
-                              (if-let [form (try-read text)]
-                                (assoc state
-                                       :regal text
-                                       :parse-error? false
-                                       :pattern (regal/pattern form))
-                                (assoc state
-                                       :regal text
-                                       :parse-error? true))))))}]
-     [:div "Flavor: " (str flavor)]
-     [:h2 "Regex"]
-     [:input {:type "text"
-              :value pattern
-              :on-change
-              (fn [e]
-                (swap! state
-                       (fn [state]
-                         (let [text (.. e -target -value)]
-                           (try
-                             (assoc state
-                                    :regal (pprint-str (parse/parse-pattern text))
-                                    :pattern text)
-                             (catch :default e
-                               (js/console.log e)))))))}]
-     [:h2 "Input string"]
-     [:input {:type "text" :value input}]
-     [:h2 "Result"]
-     [:input {:type "text" :value (pr-str result)}]]))
+    [:main.layout
+     [:div.area.plaintext
+      [:p "cool description of regexes history and rationale here"]
+      [:p "with links to repo and lambda island"]
+      [:p "or some sort of cheat sheet"]]
+     [:div.area.regal-form
+      [:h2 "Regal form"]
+      (when parse-error?
+        [:p "Parse error!"])
+      [:textarea {:value regal
+                  :on-change
+                  (fn [e]
+                    (swap! state
+                           (fn [state]
+                             (let [text (.. e -target -value)]
+                               (if-let [form (try-read text)]
+                                 (assoc state
+                                        :regal text
+                                        :parse-error? false
+                                        :pattern (regal/pattern form))
+                                 (assoc state
+                                        :regal text
+                                        :parse-error? true))))))}]]
+     [:div.area.flavor "Flavor: " (str flavor)]
+     [:div.area.regex
+      [:h2 "Regex"]
+      [:input {:type "text"
+               :value pattern
+               :on-change
+               (fn [e]
+                 (swap! state
+                        (fn [state]
+                          (let [text (.. e -target -value)]
+                            (try
+                              (assoc state
+                                     :regal (pprint-str (parse/parse-pattern text))
+                                     :pattern text)
+                              (catch :default e
+                                (js/console.log e)))))))}]]
+     [:div.area.input-string
+      [:h2 "Input string"]
+      [:input {:type "text" :value input}]]
+     [:div.area.result
+      [:h2 "Result"]
+      [:input {:type "text" :value (pr-str result)}]]]))
 
 (reagent-dom/render
  [app]
