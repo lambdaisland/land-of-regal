@@ -1,9 +1,9 @@
 (ns lambdaisland.regal-playground.styles)
 
-(def grid-areas "\"flavor input result\"
-                 \"regal  regal result\"
-                 \"regal  regal plaintext\"
-                 \"regex  regex plaintext\"")
+(def grid-areas "\"input  input input result    result\"
+                 \"regal  regal regal result    result\"
+                 \"regal  regal regal generator plaintext\"
+                 \"flavor regex regex generator plaintext\"")
 
 (def ^{:garden {:output-to "resources/public/styles.css"}}
   main
@@ -11,21 +11,22 @@
            :height "100vh"}]
    [:#app {:height "100%"}]
    [:.layout {:display               :grid
-              :grid-template-columns "1fr 2fr 3fr"
-              :grid-template-rows    "1fr 50px 3fr 1fr"
+              :grid-template-columns "auto 1fr 1fr 1fr 2fr"
+              :grid-template-rows    "auto 50px 3fr auto"
               :grid-gap              "10px"
               :grid-template-areas   grid-areas
               :height "100%"}]
-   [:.area {:padding "10px"}]
-   [:.regal-form {:background-color :coral
-                  :grid-area        "regal"}]
-   [:.flavor {:grid-area "flavor"
-              :background-color :teal}]
-   [:.regex {:grid-area "regex"
-             :background-color :lightyellow}]
-   [:.input-string {:grid-area "input"
-                    :background-color :lightgreen}]
-   [:.result {:grid-area "result"
-              :background-color :salmon}]
-   [:.plaintext {:grid-area "plaintext"
-                 :background-color :deepskyblue}]])
+   [:.area {:background-color :gainsboro
+            :padding "10px"
+            :display :grid
+            :grid-template-rows "1fr auto"}
+    [:.area-title {:grid-row-start 2
+                   :font "normal 1.1rem/1 sans-serif"
+                   :margin ".5rem 0"}]]
+   [:.regal-form {:grid-area "regal"}]
+   [:.flavor {:grid-area "flavor"}]
+   [:.regex {:grid-area "regex"}]
+   [:.input-string {:grid-area "input"}]
+   [:.result {:grid-area "result"}]
+   [:.plaintext {:grid-area "plaintext"}]
+   [:.generator {:grid-area "generator"}]])

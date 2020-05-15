@@ -43,7 +43,7 @@
       [:p "with links to repo and lambda island"]
       [:p "or some sort of cheat sheet"]]
      [:div.area.regal-form
-      [:h2 "Regal form"]
+      [:h2.area-title "Regal form"]
       (when parse-error?
         [:p "Parse error!"])
       [:textarea {:value regal
@@ -62,7 +62,7 @@
                                         :parse-error? true))))))}]]
      [:div.area.flavor "Flavor: " (str flavor)]
      [:div.area.regex
-      [:h2 "Regex"]
+      [:h2.area-title "Regex"]
       [:input {:type "text"
                :value pattern
                :on-change
@@ -77,11 +77,14 @@
                               (catch :default e
                                 (js/console.log e)))))))}]]
      [:div.area.input-string
-      [:h2 "Input string"]
-      [:input {:type "text" :value input}]]
+      [:h2.area-title "Input string"]
      [:div.area.result
-      [:h2 "Result"]
-      [:input {:type "text" :value (pr-str result)}]]]))
+      [:h2.area-title "Result"]
+      [:input {:type "text" :value (pr-str result)}]]
+     [:div.area.generator
+      [:h2.area-title "Generator"]
+      [:p "generated example"]
+      [:button "New sample"]]]))
 
 (reagent-dom/render
  [app]
