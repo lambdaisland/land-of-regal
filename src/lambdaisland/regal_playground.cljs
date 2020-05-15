@@ -78,6 +78,12 @@
                                 (js/console.log e)))))))}]]
      [:div.area.input-string
       [:h2.area-title "Input string"]
+      [:input {:type "text" :value input :on-change
+               (fn [e]
+                 (swap! state
+                        (fn [state]
+                          (let [text (.. e -target -value)]
+                            (assoc state :input text)))))}]]
      [:div.area.result
       [:h2.area-title "Result"]
       [:input {:type "text" :value (pr-str result)}]]
