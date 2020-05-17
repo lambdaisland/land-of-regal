@@ -4,3 +4,4 @@ resources/public/ui
 .nrepl-port
 yarn.lock
 node_modules
+package-lock.json
