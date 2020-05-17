@@ -80,7 +80,8 @@
                                             :regal text
                                             :parse-error? false)
                                      derive-pattern
-                                     derive-result)
+                                     derive-result
+                                     generate-values)
                                  (assoc state
                                         :regal text
                                         :pattern ""
@@ -118,7 +119,8 @@
                                   (assoc
                                     :regal (pprint-str (parse/parse-pattern text))
                                     :pattern text)
-                                  derive-result)
+                                  derive-result
+                                  generate-values)
                               (catch :default e
                                 (js/console.log e)
                                 (assoc :regal (pprint-str [:error e])
