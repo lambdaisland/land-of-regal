@@ -1,13 +1,23 @@
-(ns lambdaisland.regal-playground.styles)
+(ns lambdaisland.regal-playground.styles
+  (:require [garden.stylesheet :refer [at-font-face]]))
+
+
+(def jet-brains-mono-regular
+  (at-font-face
+   {:font-family "JetBrainsMono Regular"
+    :src "url('./fonts/JetBrainsMono-Regular.ttf')"}))
 
 (def grid-areas "\"input  input input result    result\"
                  \"regal  regal regal result    result\"
                  \"regal  regal regal generator plaintext\"
                  \"flavor regex regex generator plaintext\"")
 
+(def code [:code :textarea :input {:font-family "JetBrainsMono Regular"}])
+
 (def ^{:garden {:output-to "resources/public/styles.css"}}
   main
-  [[:body {:margin 0
+  [jet-brains-mono-regular
+   [:body {:margin 0
            :height "100vh"}]
    [:#app {:height "100%"}]
    [:.layout {:display               :grid
@@ -16,6 +26,7 @@
               :grid-gap              "10px"
               :grid-template-areas   grid-areas
               :height "100%"}]
+   code
    [:.area {:background-color :gainsboro
             :padding "10px"
             :display :grid
