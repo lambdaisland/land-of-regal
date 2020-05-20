@@ -159,7 +159,7 @@
        only you need to wrap your head around all the idiomatic idiosyncrasies
        every time (especially if moving between different implementations), but
        if you need to change something, it gets hard to track."]
-      [:img.logo {:src "/images/02_crown@32x32@10x.png"}]
+      [:img.logo {:src "./images/02_crown@32x32@10x.png"}]
       [:h1.title "Regal"]
       [:p.subtitle "Royally reified regular expressions"]
       [:p
