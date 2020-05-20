@@ -5,7 +5,7 @@
 (def jet-brains-mono-regular
   (at-font-face
    {:font-family "JetBrainsMono Regular"
-    :src "url('./fonts/JetBrainsMono-Regular.ttf')"}))
+    :src "url('/fonts/JetBrainsMono-Regular.ttf')"}))
 
 (def grid-areas "\"input  input input result    result\"
                  \"regal  regal regal result    result\"
