@@ -14,6 +14,10 @@ h1, h2, h3, p, a {
   line-height: 1.6;
 }
 
+article {
+  margin-top: 10rem;
+}
+
 .logo {
   float: right;
 }
@@ -32,6 +36,7 @@ h1, h2, h3, p, a {
 
 p {
   font-size: 1.125rem;
+  max-width: 70ch;
 }
 
 .layout {
@@ -47,8 +52,4 @@ input[type="text"] {
 
 a {
   text-decoration: none;
-}
-
-p {
-  max-width: 70ch;
 }

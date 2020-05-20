@@ -32,7 +32,7 @@
                 :display "inline-block"
                 :margin 0}]
    [:p {:font-size "1.125rem"
-        :max-width 70ch}]
+        :max-width "70ch"}]
    [:.layout {:max-width "50vw"
               :margin "0 auto"}]
    ["input[type=\"text\"]" {:border :none
