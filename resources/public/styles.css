@@ -1,61 +1,54 @@
-body {
-  margin: 0;
-  height: 100vh;
+@font-face {
+  font-family: JetBrainsMono Regular;
+  src: url('./fonts/JetBrainsMono-Regular.ttf');
 }
 
-#app {
-  height: 100%;
+code, textarea, input {
+  font-family: JetBrainsMono Regular;
+  font-weight: 600;
+}
+
+h1, h2, h3, p, a {
+  font-family: ff-meta-serif-web-pro;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.logo {
+  float: right;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-top: 5rem;
+  margin-bottom: .8rem;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  display: inline-block;
+  margin: 0;
+}
+
+p {
+  font-size: 1.125rem;
 }
 
 .layout {
-  display: grid;
-  grid-template-columns: auto 1fr 1fr 1fr 2fr;
-  grid-template-rows: auto 50px 3fr auto;
-  grid-gap: 10px;
-  grid-template-areas: "input  input input result    result"
-                   "regal  regal regal result    result"
-                   "regal  regal regal generator plaintext"
-                   "flavor regex regex generator plaintext";
-  height: 100%;
+  max-width: 50vw;
+  margin: 0 auto;
 }
 
-.area {
-  background-color: gainsboro;
-  padding: 10px;
-  display: grid;
-  grid-template-rows: 1fr auto;
+input[type="text"] {
+  border: none;
+  font-size: 1rem;
+  width: 100%;
 }
 
-.area .area-title {
-  grid-row-start: 2;
-  font: normal 1.1rem/1 sans-serif;
-  margin: .5rem 0;
+a {
+  text-decoration: none;
 }
 
-.regal-form {
-  grid-area: regal;
-}
-
-.flavor {
-  grid-area: flavor;
-}
-
-.regex {
-  grid-area: regex;
-}
-
-.input-string {
-  grid-area: input;
-}
-
-.result {
-  grid-area: result;
-}
-
-.plaintext {
-  grid-area: plaintext;
-}
-
-.generator {
-  grid-area: generator;
+p {
+  max-width: 70ch;
 }
