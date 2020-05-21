@@ -79,40 +79,47 @@
 
 (defn- main-input []
   (let [input (:input @state)]
-    [:input {:type "text" :value input :on-change
-             (fn [e]
-               (swap! state
-                      (fn [state]
-                        (let [text (.. e -target -value)]
-                          (-> state
-                              (assoc :input text)
-                              derive-result)))))}]))
+    [:<>
+     [:label "Input"]
+     [:input {:type "text" :value input :on-change
+              (fn [e]
+                (swap! state
+                       (fn [state]
+                         (let [text (.. e -target -value)]
+                           (-> state
+                               (assoc :input text)
+                               derive-result)))))}]]))
 
 (defn- fill-with [type description]
   [:a {:href "#" :on-click #(!swap-example type)} description])
 
 (defn- show-result []
-  [:input {:type "text" :value (pr-str (:result @state))}])
+  [:<>
+   [:label "Result"]
+   [:input {:type "text" :value (pr-str (:result @state))}]])
 
 (defn app []
   (let [{:keys [regal parse-error? flavor input pattern result gen]} @state]
     [:main.layout
      [:article
-      [:p "Hi. The following is just a text input field, so you are free to
-      change it."]
+      [:div.copy-wrapper
+       [:p "Hi. The following is just a text input field, so you are free to
+      change it."]]
       [main-input]
-      [:p "To aid in the manipulation of strings of text (the "
-       [:i "lingua franca"]
-       " of the digital sea) like the one above—and this one—, programmers
+      [:div.copy-wrapper
+       [:p "To aid in the manipulation of strings of text (the "
+        [:i "lingua franca"]
+        " of the digital sea) like the one above—and this one—, programmers
        felt the need to navigate them with precision. To do that, from the early
        days of Unix to this day, they have leveraged the power of "
-       [:a {:href "https://en.wikipedia.org/wiki/Regular_expression"
-            :target "_blank"}
-        "regular expressions"]
-       ". Regexes or regexps (as they are referenced among string traders), are
+        [:a {:href "https://en.wikipedia.org/wiki/Regular_expression"
+             :target "_blank"}
+         "regular expressions"]
+        ". Regexes or regexps (as they are referenced among string traders), are
         used (and abused) to perform common operations on strings such as
         search, search and replace, information extraction and input
-        validation."]
+        validation."]]
+      [:label "Regex"]
       [:input {:type "text"
                :value pattern
                :on-change
@@ -133,33 +140,34 @@
                                        :patter text
                                        :result "")))))))}]
       [show-result]
-      [:p "To get a taste of just how powerful they can be, try "
-       [fill-with :url "breaking down an URL"] " or "
-       [fill-with :email "an email address"] "; or to "
-       [fill-with :cats
-        "find the craziest cat in a list of crazy cats"] "; or even to "
-       [fill-with :password
-        "find the symbols, capital letters or numbers in a given password"] ",
+      [:div.copy-wrapper
+       [:p "To get a taste of just how powerful they can be, try "
+        [fill-with :url "breaking down an URL"] " or "
+        [fill-with :email "an email address"] "; or to "
+        [fill-with :cats
+         "find the craziest cat in a list of crazy cats"] "; or even to "
+        [fill-with :password
+         "find the symbols, capital letters or numbers in a given password"] ",
         so that you can " [:strike "annoy"] " discipline your users."]
-      [:p
-       "Regexes are a powerful tool in any programmer tool belt,
+       [:p
+        "Regexes are a powerful tool in any programmer tool belt,
        but they are hard to read, hard to maintain and have different
        implementation details, which brings a lot of confusion to the table."]
-      [:p
-       "Check out this list of " [:i "pearls"] " (pun intended) found in real
+       [:p
+        "Check out this list of " [:i "pearls"] " (pun intended) found in real
        world applications."]
-      [:ul
-       [:li "pearl 1"]
-       [:li "pearl 2"]
-       [:li "pearl 3"]]
-      [:p
-       "Scary much? Even if you like them (they’re a bit like spell craft, so
+       [:ul
+        [:li "pearl 1"]
+        [:li "pearl 2"]
+        [:li "pearl 3"]]
+       [:p
+        "Scary much? Even if you like them (they’re a bit like spell craft, so
        they do have a charm) and should learn how to read and write them,
        maintaining such arcane incantations in the long run can be tedious. Not
        only you need to wrap your head around all the idiomatic idiosyncrasies
        every time (especially if moving between different implementations), but
-       if you need to change something, it gets hard to track."]
-      [:img.logo {:src "./images/02_crown@32x32@10x.png"}]
+       if you need to change something, it gets hard to track."]]
+      [:img.logo {:src "images/02_crown@32x32@10x.png"}]
       [:h1.title "Regal"]
       [:p.subtitle "Royally reified regular expressions"]
       [:p
