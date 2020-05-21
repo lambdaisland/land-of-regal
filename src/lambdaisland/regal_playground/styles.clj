@@ -4,7 +4,7 @@
 (def jet-brains-mono-regular
   (at-font-face
    {:font-family "JetBrainsMono Regular"
-    :src "url('/fonts/JetBrainsMono-Regular.ttf')"}))
+    :src "url('./fonts/JetBrainsMono-Regular.ttf')"}))
 
 (def code [:code :textarea :input {:font-family "JetBrainsMono Regular"
                                    :font-weight 600
