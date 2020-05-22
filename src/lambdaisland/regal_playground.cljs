@@ -316,24 +316,22 @@
        in your career. But even seasoned programmers, or perhaps especially
        seasoned programmers, know that regex fatigue is real. Writing a
        hundred-character regex with nested capturing groups and a smattering of
-       wildcards can be challenge, but understanding that thing 6 months later
+       wildcards can be a challenge, but understanding that thing 6 months later
        to fix a bug is torture."]
        [:p "Languages are not static, they adapt and evolve, diverging into
        dialects, devolving to pidgins. And so it went with regular expressions.
        POSIX or Perl? JavaScript or Java? We have dozens of
-       semi-mutually-intelligble variants. Who is keeping track?"]
+       semi-mutually-intelligble dialects. Who is keeping track?"]
        [:p "When writing Clojure and ClojureScript this is felt accutely. Here
        we have two languages so alike, but their regular expressions are only
        and exactly what the platform offers. And Java and JavaScript regexes are
-       only distant cousins at best."]
+       only distant cousins at best."]]
 
-       ]
-
-
-      #_[:img.logo
-         {:src "images/02_crown@32x32@10x.png"}]
+      [:div.copy-wrapper
+       [:img.logo
+        {:src "images/02_crown@32x32@10x.png"}]]
       [:h1.title "Regal"]
-      [:p.subtitle "Royally reified regular expressions"]
+      #_[:p.subtitle "Royally reified regular expressions"]
       [:p
        "As Clojure people, when we have to deal with powerful dark arts (looking
        at you, HTML) with not so great markup formats, we know what to do: just
@@ -417,8 +415,8 @@
        [:p "There may still be some regexes that the parser struggles with. If
        you find a regex that can be represented in Regal but that we are unable to parse then please "
         [:a {:href "https://github.com/lambdaisland/regal/issues"} "File an issue."]]
-       [:p "(If you really want the boring list then have a look at the " [:a {:href "#"} "Syntax cheatsheet"]]
-       #_[cheatsheet]
+       [:p "(If you really want the boring list then have a look at the " [:a {:href "#syntax"} "Syntax cheatsheet.)"]]
+
        [:p "Regal can not just match strings, it can also generate them by
        turning your regal forms into test.check compatible generators."] ]
 
@@ -445,12 +443,8 @@
             \"xxx\"
             {:registry {:regal regal-malli/into-schema}})"]]
 
-
-
-       ]
-
-      ]
-     ]))
+       [:h2#syntax "Syntax overview"]
+       [cheatsheet]]]]))
 
 (reagent-dom/render
  [app]
