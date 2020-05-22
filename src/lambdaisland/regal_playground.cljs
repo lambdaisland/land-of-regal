@@ -15,7 +15,8 @@
 (defn try-read [form]
   (try
     (reader/read-string form)
-    (catch :default e)))
+    (catch :default e
+      (js/console.error e))))
 
 (defn regal-form [state]
   (try-read (:regal state)))
@@ -30,212 +31,79 @@
     (regal/compile pattern)))
 
 (defn derive-pattern [state]
-  (assoc state :pattern (or (regal-pattern state) "")))
+  (assoc state :pattern (or
+                         (try
+                           (regal-pattern state)
+                           (catch :default e
+                             (js/console.error e)))
+                         "")))
 
 (defn derive-result [state]
   (let [result (try
-                 (re-find (compiled-regex state) (:input state))
+                 (re-seq (compiled-regex state) (:input state))
                  (catch :default e
+                   (js/console.error e)
                    "Error!"))]
     (assoc state :result result)))
 
 (defn generate-values [state]
-  (if-let [form (regal-form state)]
-    (assoc state
-           :gen
-           (generator/sample form))
-    state))
+  (try
+    (if-let [form (regal-form state)]
+      (assoc state
+             :gen
+             (doall (generator/sample form)))
+      state)
+    (catch :default e
+      (js/console.error e)
+      (assoc state :gen ()))))
 
 (defonce state
-  (let [form [:cat
-              [:capture [:cat [:class [\A \Z]] [:+ [:class [\a \z]]]]]
-              [:+ :whitespace]
-              [:capture [:cat [:class [\A \Z]] [:+ [:class [\a \z]]]]]]]
+  (let [form [:+ :word]]
     (reagent/atom (-> {:regal        (pprint-str form)
                        :flavor       :ecma
                        :parse-error? false
-                       :input        "Lambda Island"
+                       :input        "Royally Reified Regular Expressions"
                        :examples {:url {:content "https://www.lambdaisland.com"
-                                        :form [:a]} ;FIX
+                                        :form [:cat
+                                               :start
+                                               [:? [:capture [:cat [:capture [:+ [:not ":/?#"]]] ":"]]]
+                                               [:? [:capture [:cat "//" [:capture [:* [:not "/?#"]]]]]]
+                                               [:? [:capture [:* [:not "?#"]]]]
+                                               [:? [:capture [:cat "?" [:capture [:* [:not "#"]]]]]]
+                                               [:? [:capture [:cat "#" [:capture [:* :any]]]]]
+                                               :end]}
                                   :email {:content "johndoe@example.com"
-                                          :form [:a]} ;FIX
+                                          :form [:cat
+                                                 [:+ [:class :word ".%+-"]]
+                                                 "@"
+                                                 [:+ [:class ["A" "Z"] ["a" "z"] ["0" "9"] ".-"]]
+                                                 "."
+                                                 [:repeat [:class ["A" "Z"] ["a" "z"]] "2" "4"]]}
                                   :cats {:content "Tom, Cheshire, Sylvester, Garfield and Hobes"
-                                         :form [:a]} ;FIX
-                                  :password {:content "ReallyHardP4s$"}}}
+                                         :form [:cat
+                                                [:class ["A" "Z"]]
+                                                [:+ [:class ["a" "z"]]]]}
+                                  :password {:content "ReallyHardP4s$"
+                                             :form [:class :non-word :digit ["A" "Z"]]}}}
                       derive-pattern
                       derive-result
                       generate-values))))
 
-(defn- !swap-example [example-type]
+(defn- swap-example! [example-type]
   (let [{:keys [content form]} (get-in @state [:examples example-type])]
     (swap! state
            (fn [state]
              (-> state
-                 (assoc :input content))))
-    (swap! state
-           (fn [state]
-             (-> state
-                 (assoc :form form))))))
+                 (assoc :input content
+                        :regal (pprint-str form))
+                 derive-result
+                 derive-pattern)))))
 
 (defn- main-input []
   (let [input (:input @state)]
     [:<>
-     [:label "Input"]
-     [:input {:type "text" :value input :on-change
-              (fn [e]
-                (swap! state
-                       (fn [state]
-                         (let [text (.. e -target -value)]
-                           (-> state
-                               (assoc :input text)
-                               derive-result)))))}]]))
-
-(defn- fill-with [type description]
-  [:a {:href "#" :on-click #(!swap-example type)} description])
-
-(defn- show-result []
-  [:<>
-   [:label "Result"]
-   [:input {:type "text" :value (pr-str (:result @state))}]])
-
-(defn app []
-  (let [{:keys [regal parse-error? flavor input pattern result gen]} @state]
-    [:main.layout
-     [:article
-      [:div.copy-wrapper
-       [:p "Hi. The following is just a text input field, so you are free to
-      change it."]]
-      [main-input]
-      [:div.copy-wrapper
-       [:p "To aid in the manipulation of strings of text (the "
-        [:i "lingua franca"]
-        " of the digital sea) like the one above—and this one—, programmers
-       felt the need to navigate them with precision. To do that, from the early
-       days of Unix to this day, they have leveraged the power of "
-        [:a {:href "https://en.wikipedia.org/wiki/Regular_expression"
-             :target "_blank"}
-         "regular expressions"]
-        ". Regexes or regexps (as they are referenced among string traders), are
-        used (and abused) to perform common operations on strings such as
-        search, search and replace, information extraction and input
-        validation."]]
-      [:label "Regex"]
-      [:input {:type "text"
-               :value pattern
-               :on-change
-               (fn [e]
-                 (swap! state
-                        (fn [state]
-                          (let [text (.. e -target -value)]
-                            (try
-                              (-> state
-                                  (assoc
-                                   :regal (pprint-str (parse/parse-pattern text))
-                                   :pattern text)
-                                  derive-result
-                                  generate-values)
-                              (catch :default e
-                                (js/console.log e)
-                                (assoc :regal (pprint-str [:error e])
-                                       :patter text
-                                       :result "")))))))}]
-      [show-result]
-      [:div.copy-wrapper
-       [:p "To get a taste of just how powerful they can be, try "
-        [fill-with :url "breaking down an URL"] " or "
-        [fill-with :email "an email address"] "; or to "
-        [fill-with :cats
-         "find the craziest cat in a list of crazy cats"] "; or even to "
-        [fill-with :password
-         "find the symbols, capital letters or numbers in a given password"] ",
-        so that you can " [:strike "annoy"] " discipline your users."]
-       [:p
-        "Regexes are a powerful tool in any programmer tool belt,
-       but they are hard to read, hard to maintain and have different
-       implementation details, which brings a lot of confusion to the table."]
-       [:p
-        "Check out this list of " [:i "pearls"] " (pun intended) found in real
-       world applications."]
-       [:ul
-        [:li "pearl 1"]
-        [:li "pearl 2"]
-        [:li "pearl 3"]]
-       [:p
-        "Scary much? Even if you like them (they’re a bit like spell craft, so
-       they do have a charm) and should learn how to read and write them,
-       maintaining such arcane incantations in the long run can be tedious. Not
-       only you need to wrap your head around all the idiomatic idiosyncrasies
-       every time (especially if moving between different implementations), but
-       if you need to change something, it gets hard to track."]]
-      [:img.logo {:src "images/02_crown@32x32@10x.png"}]
-      [:h1.title "Regal"]
-      [:p.subtitle "Royally reified regular expressions"]
-      [:p
-       "As Clojure people, when we have to deal with powerful dark arts (looking
-       at you, HTML) with not so great markup formats, we know what to do: just
-       cast them as pure Clojure data structures! The result of applying that
-       sorcery to regexes is Regal."]]
-     [:div.area.regal-form
-      [:h2.area-title "Regal form"]
-      [:textarea {:value regal
-                  :on-change
-                  (fn [e]
-                    (swap! state
-                           (fn [state]
-                             (let [text (.. e -target -value)]
-                               (if-let [form (try-read text)]
-                                 (-> (assoc state
-                                            :regal text
-                                            :parse-error? false)
-                                     derive-pattern
-                                     derive-result
-                                     generate-values)
-                                 (assoc state
-                                        :regal text
-                                        :pattern ""
-                                        :parse-error? true
-                                        :result ""))))))}]
-      (when parse-error?
-        [:p "Parse error!"])]
-     [:div.area.flavor "Flavor: "
-      (for [f [:ecma :java8 :java9]]
-        ^{:key (str f)}
-        [:div
-         [:input (cond-> {:type "radio"
-                          :id (name f)
-                          :value (name f)
-                          :name "flavor"
-                          :on-change (fn [_]
-                                       (swap! state #(-> %
-                                                         (assoc :flavor f)
-                                                         derive-pattern
-                                                         derive-result)))}
-                   (= f flavor)
-                   (assoc :checked true))]
-         [:label {:for (name f)} (str f)]])]
-     [:div.area.regex
-      [:h2.area-title "Regex"]
-      [:input {:type "text"
-               :value pattern
-               :on-change
-               (fn [e]
-                 (swap! state
-                        (fn [state]
-                          (let [text (.. e -target -value)]
-                            (try
-                              (-> state
-                                  (assoc
-                                   :regal (pprint-str (parse/parse-pattern text))
-                                   :pattern text)
-                                  derive-result
-                                  generate-values)
-                              (catch :default e
-                                (js/console.log e)
-                                (assoc :regal (pprint-str [:error e])
-                                       :patter text
-                                       :result "")))))))}]]
-     [:div.area.input-string
-      [:h2.area-title "Input string"]
+     [:label.interactive "Input"]
+     [:div.interactive
       [:input {:type "text" :value input :on-change
                (fn [e]
                  (swap! state
@@ -243,20 +111,346 @@
                           (let [text (.. e -target -value)]
                             (-> state
                                 (assoc :input text)
-                                derive-result)))))}]]
-     [:div.area.result
-      [:h2.area-title "Result"]
-      [:input {:type "text" :value (pr-str result)}]]
-     [:div.area.generator
-      [:h2.area-title "Generator"]
-      [:p "generated example"]
-      (into
-       [:ul]
-       (for [s gen]
-         [:ul s]))
-      [:button
-       {:on-click #(swap! state generate-values)}
-       "New sample"]]]))
+                                derive-result)))))}]]]))
+
+(defn- fill-with [type description]
+  [:a {:href "#" :on-click (fn [^js e]
+                             (.preventDefault e)
+                             (swap-example! type))} description])
+
+(defn- show-result []
+  [:<>
+   [:label.interactive "Result"]
+   [:div.interactive
+    [:textarea {:value (pprint-str (:result @state))}]]
+   ])
+
+(defn cheatsheet []
+  [:ul
+   [:li
+    "Strings and characters match literally. They are escaped, so "
+    [:code "."]
+    " matches a\nperiod, not any character, "
+    [:code "^"]
+    " matches a caret, etc."]
+   [:li
+    "A few keywords have special meaning.\n    "
+    [:ul
+     [:li
+      [:code ":any"]
+      " : match any character, like "
+      [:code "."]
+      ". Does not match newlines."]
+     [:li [:code ":start"] " match the start of the input"]
+     [:li [:code ":end"] " : match the end of the input"]
+     [:li [:code ":digit"] " : match any digit (" [:code "0-9"] ")"]
+     [:li [:code ":non-digit"] " : match non-digits (not " [:code "0-9"] ")"]
+     [:li [:code ":word"] " : match word characters (" [:code "A-Za-z0-9_"] ")"]
+     [:li
+      [:code ":non-word"]
+      " : match non-word characters (not "
+      [:code "A-Za-z0-9_"]
+      ")"]
+     [:li [:code ":newline"] " : Match " [:code "\\n"]]
+     [:li [:code ":return"] " : Match " [:code "\\r"]]
+     [:li [:code ":tab"] " : Match " [:code "\\t"]]
+     [:li [:code ":form-feed"] " : Match " [:code "\\f"]]
+     [:li
+      [:code ":line-break"]
+      " : Match "
+      [:code "\\n"]
+      ", "
+      [:code "\\r"]
+      ", "
+      [:code "\\r\\n"]
+      ", or other unicode newline characters"]
+     [:li [:code ":alert"] " : match " [:code "\\a"] " (U+0007)"]
+     [:li [:code ":escape"] " : match " [:code "\\e"] " (U+001B)"]
+     [:li
+      [:code ":whitespace"]
+      " : match any whitespace character. Uses "
+      [:code "\\s"]
+      " on JavaScript, and\na character range of whitespace characters on Java with equivalent semantics\nas JavaScript "
+      [:code "\\s"]
+      ", since "
+      [:code "\\s"]
+      " in Java only matches ASCII whitespace."]
+     [:li [:code ":non-whitespace"] " : match non-whitespace"]
+     [:li
+      [:code ":vertical-whitespace"]
+      " : match vertical whitespace, including newlines and vertical tabs "
+      [:code "#\"\\n\\x0B\\f\\r\\x85\\u2028\\u2029\""]]
+     [:li
+      [:code ":vertical-tab"]
+      " : match a vertical tab "
+      [:code "\\v"]
+      " (U+000B)"]
+     [:li [:code ":null"] " : match a NULL byte/char"]]]
+   [:li
+    "All other forms are vectors, with the first element being a keyword\n    "
+    [:ul
+     [:li
+      [:code "[:cat forms...]"]
+      " : concatenation, match the given Regal expressions in order"]
+     [:li
+      [:code "[:alt forms...]"]
+      " : alternatives, match one of the given options, like "
+      [:code "(foo|bar|baz)"]]
+     [:li [:code "[:* form]"] " : match the given form zero or more times"]
+     [:li [:code "[:+ form]"] " : match the given form one or more times"]
+     [:li [:code "[:? form]"] " : match the given form zero or one time"]
+     [:li
+      [:code "[:class entries...]"]
+      " : match any of the given characters or ranges, with ranges given as two element vectors. E.g. "
+      [:code "[:class [\\a \\z] [\\A \\Z] \"_\" \"-\"]"]
+      " is equivalent to "
+      [:code "[a-zA-Z_-]"]]
+     [:li
+      [:code "[:not entries...]"]
+      " : like "
+      [:code ":class"]
+      ", but negates the result, equivalent to "
+      [:code "[^...]"]]
+     [:li
+      [:code "[:repeat form min max]"]
+      " : repeat a form a number of times, like "
+      [:code "{2,5}"]]
+     [:li
+      [:code "[:capture forms...]"]
+      " : capturing group with implicit concatenation of the given forms"]
+     [:li
+      [:code "[:char number]"]
+      " : a single character, denoted by its unicode codepoint"]
+     [:li
+      [:code "[:ctrl char]"]
+      " : a control character, e.g. "
+      [:code "[:ctrl \\A]"]
+      " => "
+      [:code "^A"]
+      " => "
+      [:code "#\"\\cA\""]]
+     [:li
+      [:code "[:lookahead ...]"]
+      " : match if followed by pattern, without consuming input"]
+     [:li
+      [:code "[:negative-lookahead ...]"]
+      " : match if not followed by pattern"]
+     [:li [:code "[:lookbehind ...]"] " : match if preceded by pattern"]
+     [:li
+      [:code "[:negative-lookbehind ...]"]
+      " : match if not preceded by pattern"]
+     [:li
+      [:code "[:atomic ...]"]
+      " : match without backtracking ("
+      [:a
+       {:shape "rect", :href "https://www.regular-expressions.info/atomic.html"}
+       "atomic group"]
+      ")"]]]])
+
+(defn app []
+  (let [{:keys [regal parse-error? flavor input pattern result gen]} @state]
+    [:main.layout
+     [:article
+      [:h1.title "Regal"]
+      [:div.copy-wrapper
+       [:p "Greetings, wanderer. This scroll you are reading is an interactive
+       explainer. And this here below is a text field. Go ahead, change it!"]]
+      [main-input]
+      [:div.copy-wrapper
+       [:p "Since the early days of computing programmers have been manipulating
+       pieces of text like the one above, or the one I'm writing now (and that
+       you are reading). But text has a mind of its own."]
+
+       [:p "To tame the wild see of characters and strings, to control the
+       languages of humans, early programmers created a language of their own,
+       powerful and arcane, whose utterances would come to life, incessantly
+       seeking patterns in the chaos."]
+
+       [:p "These "
+        [:a {:href   "https://en.wikipedia.org/wiki/Regular_expression"
+             :target "_blank"}
+         "regular expressions"]
+        ", (regexes, regexps), appear in text editors and terminals, in sources
+        and scripts, where they search and replace, extract and validate, to
+        this very day."]
+
+       [:p "Hush... Here comes one now. Still a youngster, of modest plumage."]]
+
+      [:label.interactive "Regex"]
+      [:div.interactive
+       [:input {:type  "text"
+                :value pattern
+                :on-change
+                (fn [e]
+                  (swap! state
+                         (fn [state]
+                           (let [text (.. e -target -value)]
+                             (try
+                               (-> state
+                                   (assoc
+                                     :regal (pprint-str (parse/parse-pattern text))
+                                     :pattern text)
+                                   derive-result
+                                   generate-values)
+                               (catch :default e
+                                 (js/console.error e)
+                                 (assoc :regal (pprint-str [:error e])
+                                        :patter text
+                                        :result "")))))))}]]
+      [:div.copy-wrapper.code
+
+       [:code
+        "(re-seq #\"" pattern "\", \"" input "\")"]
+       ]
+      [show-result]
+      [:div.copy-wrapper
+       [:p "But they're not nearly all as harmless as that wee regex. To get a
+       taste of just how powerful they can be, try "
+        [fill-with :url "breaking down an URL"] " or "
+        [fill-with :email "an email address"] "; or to "
+        [fill-with :cats
+         "find all the cats in a list of crazy cats"] "; or to "
+        [fill-with :password
+         "find the symbols, capital letters or numbers in a given password."] ]
+       [:p "Not bad, right? Getting a good grip on regexes is a good investment
+       in your career. But even seasoned programmers, or perhaps especially
+       seasoned programmers, know that regex fatigue is real. Writing a
+       hundred-character regex with nested capturing groups and a smattering of
+       wildcards can be challenge, but understanding that thing 6 months later
+       to fix a bug is torture."]
+       [:p "Languages are not static, they adapt and evolve, diverging into
+       dialects, devolving to pidgins. And so it went with regular expressions.
+       POSIX or Perl? JavaScript or Java? We have dozens of
+       semi-mutually-intelligble variants. Who is keeping track?"]
+       [:p "When writing Clojure and ClojureScript this is felt accutely. Here
+       we have two languages so alike, but their regular expressions are only
+       and exactly what the platform offers. And Java and JavaScript regexes are
+       only distant cousins at best."]
+
+       ]
+
+
+      #_[:img.logo
+         {:src "images/02_crown@32x32@10x.png"}]
+      [:h1.title "Regal"]
+      [:p.subtitle "Royally reified regular expressions"]
+      [:p
+       "As Clojure people, when we have to deal with powerful dark arts (looking
+       at you, HTML) with not so great markup formats, we know what to do: just
+       cast them as pure Clojure data structures! The result of applying that
+       sorcery to regexes is Regal."]
+      [:label.regal-form.interactive "Regal form"]
+      [:div.regal-form.interactive
+       [:textarea {:value regal
+                   :on-change
+                   (fn [e]
+                     (swap! state
+                            (fn [state]
+                              (let [text (.. e -target -value)]
+                                (if-let [form (try-read text)]
+                                  (-> (assoc state
+                                             :regal text
+                                             :parse-error? false)
+                                      derive-pattern
+                                      derive-result
+                                      generate-values)
+                                  (assoc state
+                                         :regal text
+                                         :pattern ""
+                                         :parse-error? true
+                                         :result ""))))))}]
+       (when parse-error?
+         [:p "Parse error!"])]
+      [:div.copy-wrapper
+       [:p "This regal form has fixed semantics. If you use it on Clojure then
+       we emit a Java regex. If you use it on ClojureScript, you get a
+       JavaScript regex. Sometimes these will differ, but they will match the
+       exact same inputs."]]
+      [:label.interactive "Flavor"]
+      [:div.flavor.interactive
+       (for [f [:ecma :java8 :java9]]
+         ^{:key (str f)}
+         [:div
+          [:input (cond-> {:type "radio"
+                           :id (name f)
+                           :value (name f)
+                           :name "flavor"
+                           :on-change (fn [_]
+                                        (swap! state #(-> %
+                                                          (assoc :flavor f)
+                                                          derive-pattern
+                                                          derive-result)))}
+                    (= f flavor)
+                    (assoc :checked true))]
+          [:label {:for (name f)} ({:ecma  "JavaScript"
+                                    :java8 "Java 8"
+                                    :java9 "Java 9"} f)]])]
+      [:label.interactive "Resulting Regex"]
+      [:div.interactive
+       [:input {:type  "text"
+                :value pattern
+                :on-change
+                (fn [e]
+                  (swap! state
+                         (fn [state]
+                           (let [text (.. e -target -value)]
+                             (try
+                               (-> state
+                                   (assoc
+                                     :regal (pprint-str (parse/parse-pattern text))
+                                     :pattern text)
+                                   derive-result
+                                   generate-values)
+                               (catch :default e
+                                 (js/console.error e)
+                                 (assoc :regal (pprint-str [:error e])
+                                        :patter text
+                                        :result "")))))))}]]
+
+      [:div.copy-wrapper
+       [:p
+        "There's a lot you can do with Regal. We could give you a boring list of
+        syntax to try, but the nice thing is that Regal can also parse regular
+        expressions to Regal forms. So if you know regex you can teach yourself
+        Regal easily. Try changing the regex and see how the regal form
+        updates."]
+       [:p "There may still be some regexes that the parser struggles with. If
+       you find a regex that can be represented in Regal but that we are unable to parse then please "
+        [:a {:href "https://github.com/lambdaisland/regal/issues"} "File an issue."]]
+       [:p "(If you really want the boring list then have a look at the " [:a {:href "#"} "Syntax cheatsheet"]]
+       #_[cheatsheet]
+       [:p "Regal can not just match strings, it can also generate them by
+       turning your regal forms into test.check compatible generators."] ]
+
+      [:label.interactive "Generator"]
+      [:div.interactive
+       (into
+        [:ul]
+        (for [s gen]
+          [:ul s]))
+       [:button
+        {:on-click #(swap! state generate-values)}
+        "New sample"]]
+
+      [:div.copy-wrapper
+       [:p "Validating things, but also generating them, in an idiomatic and
+      composable way? Sounds a lot like clojure.spec.alpha. Regal was designed
+      with spec in mind, and plays with it nicely, as well as with Malli."]
+
+       [:pre
+        [:code "(require '[malli.core :as m]
+         '[lambdaisland.regal.malli :as regal-malli])
+
+(m/validate [:regal [:+ \"x\"]]
+            \"xxx\"
+            {:registry {:regal regal-malli/into-schema}})"]]
+
+
+
+       ]
+
+      ]
+     ]))
 
 (reagent-dom/render
  [app]

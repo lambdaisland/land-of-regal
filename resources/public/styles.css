@@ -2,7 +2,11 @@
   max-width: max-content;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(min-content, 3fr) minmax(0, 1fr);
+  grid-template-columns: 1fr minmax(auto, 90ch) 1fr;
+}
+
+.layout > * {
+  max-width: 98vw;
 }
 
 @font-face {
@@ -25,13 +29,25 @@ h1, h2, h3, p, a {
 article {
   margin-top: 10rem;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   grid-column-gap: 1rem;
   grid-column-start: 2;
 }
 
 h1, h2, p, input, img, ul, .copy-wrapper {
   grid-column-start: 2;
+}
+
+.code {
+  margin: 1.125rem 0;
+}
+
+label {
+  height: 100%;
+}
+
+pre {
+  overflow: hidden;
 }
 
 .logo {
@@ -58,7 +74,6 @@ h1, h2, p, input, img, ul, .copy-wrapper {
 
 p {
   font-size: 1.125rem;
-  max-width: 56ch;
 }
 
 input[type="text"] {
@@ -84,6 +99,29 @@ ul {
   padding-left: 0;
 }
 
+ul ul {
+  padding-left: 1em;
+}
+
 .area {
   display: none;
+}
+
+.regal-form {
+  position: sticky;
+  bottom: 0;
+  height: 100%;
+}
+
+.interactive {
+  background-color: #eee;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  height: 9em;
+  border: none;
 }
