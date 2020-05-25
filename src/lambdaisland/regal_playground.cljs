@@ -257,11 +257,11 @@
        explainer. And this here below is a text field. Go ahead, change it!"]]
       [main-input]
       [:div.copy-wrapper
-       [:p "Since the early days of computing programmers have been manipulating
-       pieces of text like the one above, or the one I'm writing now (and that
-       you are reading). But text has a mind of its own."]
+       [:p "Since the early days of computing, programmers have been
+       manipulating pieces of text like the one above, or the one I'm writing
+       now (and that you are reading). But text has a mind of its own."]
 
-       [:p "To tame the wild see of characters and strings, to control the
+       [:p "To tame the wild sea of characters and strings, to control the
        languages of humans, early programmers created a language of their own,
        powerful and arcane, whose utterances would come to life, incessantly
        seeking patterns in the chaos."]
