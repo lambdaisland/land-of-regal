@@ -251,7 +251,6 @@
   (let [{:keys [regal parse-error? flavor input pattern result gen]} @state]
     [:main.layout
      [:article
-      [:h1.title "Regal"]
       [:div.copy-wrapper
        [:p "Greetings, wanderer. You have reached the gates
         of " [:strong "Regal"] ", a library for the programming languages
