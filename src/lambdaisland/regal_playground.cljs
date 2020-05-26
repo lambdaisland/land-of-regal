@@ -259,7 +259,7 @@
       [main-input]
       [:div.copy-wrapper
        [:p "Since the early days of computing, programmers have been
-        manipulating pieces of text like the one above, or the one I'm writing
+        manipulating pieces of text like the one above, or the one I’m writing
         now (and that you are reading). But text has a mind of its own."]
 
        [:p "To tame the wild sea of characters and strings, to control the
@@ -305,7 +305,7 @@
        ]
       [show-result]
       [:div.copy-wrapper
-       [:p "But they're not nearly all as harmless as that wee regex. To get a
+       [:p "But they’re not nearly all as harmless as that wee regex. To get a
         taste of just how powerful they can be, try "
         [fill-with :url "breaking down an URL"] " or "
         [fill-with :email "an email address"] "; or to "
@@ -317,7 +317,7 @@
        in your career. But even seasoned programmers, or perhaps especially
        seasoned programmers, know that regex fatigue is real. Writing a
        hundred-character regex with nested capturing groups and a smattering of
-       wildcards can be a challenge, but understanding that thing 6 months later
+       wildcards can be a challenge, but understanding that thing six months later
        to fix a bug is torture."]
        [:p "Languages are not static, they adapt and evolve, diverging into
        dialects, devolving to pidgins. And so it went with regular expressions.
@@ -408,15 +408,15 @@
 
       [:div.copy-wrapper
        [:p
-        "There's a lot you can do with Regal. We could give you a boring list of
+        "There’s a lot you can do with Regal. We could give you a boring list of
         syntax to try, but the nice thing is that Regal can also parse regular
         expressions to Regal forms. So if you know regex you can teach yourself
         Regal easily. Try changing the regex and see how the regal form
         updates."]
        [:p "There may still be some regexes that the parser struggles with. If
        you find a regex that can be represented in Regal but that we are unable to parse then please "
-        [:a {:href "https://github.com/lambdaisland/regal/issues"} "File an issue."]]
-       [:p "(If you really want the boring list then have a look at the " [:a {:href "#syntax"} "Syntax cheatsheet.)"]]
+        [:a {:href "https://github.com/lambdaisland/regal/issues"} "file an issue."]]
+       [:p "(If you really want the boring list then have a look at the " [:a {:href "#syntax"} "syntax overview.)"]]
 
        [:p "Regal can not just match strings, it can also generate them by
        turning your regal forms into test.check compatible generators."] ]
@@ -444,7 +444,7 @@
             \"xxx\"
             {:registry {:regal regal-malli/into-schema}})"]]
 
-       [:h2#syntax "Syntax overview"]
+       [:h2#syntax.title "Syntax overview"]
        [cheatsheet]]]]))
 
 (reagent-dom/render
