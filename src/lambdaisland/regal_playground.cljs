@@ -253,18 +253,20 @@
      [:article
       [:h1.title "Regal"]
       [:div.copy-wrapper
-       [:p "Greetings, wanderer. This scroll you are reading is an interactive
-       explainer. And this here below is a text field. Go ahead, change it!"]]
+       [:p "Greetings, wanderer. You have reached the gates
+        of " [:strong "Regal"] ", a library for the programming languages
+        Clojure and ClojureScript. This scroll you are reading is an interactive
+        explainer. And this here below is a text field. Go ahead, change it!"]]
       [main-input]
       [:div.copy-wrapper
        [:p "Since the early days of computing, programmers have been
-       manipulating pieces of text like the one above, or the one I'm writing
-       now (and that you are reading). But text has a mind of its own."]
+        manipulating pieces of text like the one above, or the one I'm writing
+        now (and that you are reading). But text has a mind of its own."]
 
        [:p "To tame the wild sea of characters and strings, to control the
-       languages of humans, early programmers created a language of their own,
-       powerful and arcane, whose utterances would come to life, incessantly
-       seeking patterns in the chaos."]
+        languages of humans, early programmers created a language of their own,
+        powerful and arcane, whose utterances would come to life, incessantly
+        seeking patterns in the chaos."]
 
        [:p "These "
         [:a {:href   "https://en.wikipedia.org/wiki/Regular_expression"
@@ -288,8 +290,8 @@
                              (try
                                (-> state
                                    (assoc
-                                     :regal (pprint-str (parse/parse-pattern text))
-                                     :pattern text)
+                                    :regal (pprint-str (parse/parse-pattern text))
+                                    :pattern text)
                                    derive-result
                                    generate-values)
                                (catch :default e
@@ -305,7 +307,7 @@
       [show-result]
       [:div.copy-wrapper
        [:p "But they're not nearly all as harmless as that wee regex. To get a
-       taste of just how powerful they can be, try "
+        taste of just how powerful they can be, try "
         [fill-with :url "breaking down an URL"] " or "
         [fill-with :email "an email address"] "; or to "
         [fill-with :cats
@@ -395,8 +397,8 @@
                              (try
                                (-> state
                                    (assoc
-                                     :regal (pprint-str (parse/parse-pattern text))
-                                     :pattern text)
+                                    :regal (pprint-str (parse/parse-pattern text))
+                                    :pattern text)
                                    derive-result
                                    generate-values)
                                (catch :default e
