@@ -90,7 +90,6 @@ p {
 
 input[type="text"] {
   border: none;
-  line-height: 1.5;
   width: 100%;
 }
 
@@ -100,6 +99,7 @@ a {
 
 label {
   align-self: center;
+  color: gray;
   grid-column-start: 1;
   text-align: right;
   font-variant: all-small-caps;
@@ -125,6 +125,15 @@ ul ul {
   height: 100%;
 }
 
+.regal-form textarea {
+  height: 9rem;
+}
+
+label.regal-form {
+  color: darkslategray;
+  font-weight: 900;
+}
+
 .interactive {
   background-color: #eee;
   padding: 1em;
@@ -132,9 +141,8 @@ ul ul {
 }
 
 textarea {
-  width: 100%;
+  width: 65ch;
   box-sizing: border-box;
-  height: 9em;
   border: none;
 }
 
@@ -146,4 +154,8 @@ li p {
 
 li code {
   white-space: nowrap;
+}
+
+.flavor label {
+  color: initial;
 }

@@ -48,10 +48,10 @@
    [:h3 {:font-size "1.2rem"}]
    [:p {:font-size "1.125rem" :max-width "65ch"}]
    ["input[type=\"text\"]" {:border :none
-                            :line-height 1.5
                             :width "100%"}]
    [:a {:text-decoration :none}]
    [:label {:align-self :center
+            :color :gray
             :grid-column-start "1"
             :text-align :right
             :font-variant :all-small-caps
@@ -62,15 +62,18 @@
    [:.area {:display :none}]
    [:.regal-form {:position :sticky
                   :bottom "0"
-                  :height "100%"}]
+                  :height "100%"}
+    [:textarea {:height "9rem"}]]
+   [:label.regal-form {:color :darkslategray
+                       :font-weight 900}]
    [:.interactive {:background-color "#eee"
                    :padding "1em"
                    :box-sizing :border-box}]
-   [:textarea {:width "100%"
+   [:textarea {:width "65ch"
                :box-sizing :border-box
-               :height "9em"
                :border :none}]
    [:li [:p {:padding-left "1rem"
              :margin-top ".2rem"
              :margin-bottom ".5rem"}]]
-   [:li [:code {:white-space "nowrap"}]]])
+   [:li [:code {:white-space "nowrap"}]]
+   [:.flavor [:label {:color :initial}]]])

@@ -102,8 +102,8 @@
 (defn- main-input []
   (let [input (:input @state)]
     [:<>
-     [:label.interactive "Input"]
-     [:div.interactive
+     [:label "Input"]
+     [:div
       [:input {:type "text" :value input :on-change
                (fn [e]
                  (swap! state
@@ -120,8 +120,8 @@
 
 (defn- show-result []
   [:<>
-   [:label.interactive "Result"]
-   [:div.interactive
+   [:label "Result"]
+   [:div
     [:textarea {:value (pprint-str (:result @state))}]]])
 
 (defn cheatsheet []
@@ -290,8 +290,8 @@
 
        [:p "Hush... Here comes one now. Still a youngster, of modest plumage."]]
 
-      [:label.interactive "Regex"]
-      [:div.interactive
+      [:label "Regex"]
+      [:div
        [:input {:type  "text"
                 :value pattern
                 :on-change
@@ -378,8 +378,8 @@
        we emit a Java regex. If you use it on ClojureScript, you get a
        JavaScript regex. Sometimes these will differ, but they will match the
        exact same inputs."]]
-      [:label.interactive "Flavor"]
-      [:div.flavor.interactive
+      [:label "Flavor"]
+      [:div.flavor
        (for [f [:ecma :java8 :java9]]
          ^{:key (str f)}
          [:div
@@ -397,8 +397,8 @@
           [:label {:for (name f)} ({:ecma  "JavaScript"
                                     :java8 "Java 8"
                                     :java9 "Java 9"} f)]])]
-      [:label.interactive "Resulting Regex"]
-      [:div.interactive
+      [:label "Resulting Regex"]
+      [:div
        [:input {:type  "text"
                 :value pattern
                 :on-change
@@ -434,8 +434,8 @@
        [:p "Regal can not just match strings, it can also generate them by
        turning your regal forms into test.check compatible generators."]]
 
-      [:label.interactive "Generator"]
-      [:div.interactive
+      [:label "Generator"]
+      [:div
        (into
         [:ul]
         (for [s gen]
