@@ -34,7 +34,7 @@ article {
   grid-column-start: 2;
 }
 
-h1, h2, p, input, img, ul, .copy-wrapper {
+h1, h2, h3, p, input, img, ul, .copy-wrapper {
   grid-column-start: 2;
 }
 
@@ -55,9 +55,8 @@ pre {
   grid-row: 7/span 3;
 }
 
-.title, .subtitle {
+.title, .subtitle, h2, h3 {
   font-variant: all-small-caps;
-  font-weight: bold;
 }
 
 .title {
@@ -72,8 +71,21 @@ pre {
   margin: 0;
 }
 
+.title, .subtitle, h2, h3 {
+  font-weight: bold;
+}
+
+h2 {
+  margin-top: 3rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
 p {
   font-size: 1.125rem;
+  max-width: 65ch;
 }
 
 input[type="text"] {
@@ -95,7 +107,7 @@ label {
 }
 
 ul {
-  list-style: circle;
+  list-style: inside circle;
   padding-left: 0;
 }
 
@@ -124,4 +136,14 @@ textarea {
   box-sizing: border-box;
   height: 9em;
   border: none;
+}
+
+li p {
+  padding-left: 1rem;
+  margin-top: .2rem;
+  margin-bottom: .5rem;
+}
+
+li code {
+  white-space: nowrap;
 }

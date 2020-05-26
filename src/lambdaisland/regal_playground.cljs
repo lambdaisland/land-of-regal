@@ -122,130 +122,143 @@
   [:<>
    [:label.interactive "Result"]
    [:div.interactive
-    [:textarea {:value (pprint-str (:result @state))}]]
-   ])
+    [:textarea {:value (pprint-str (:result @state))}]]])
 
 (defn cheatsheet []
-  [:ul
-   [:li
+  [:<>
+   [:p
     "Strings and characters match literally. They are escaped, so "
     [:code "."]
     " matches a\nperiod, not any character, "
     [:code "^"]
     " matches a caret, etc."]
-   [:li
-    "A few keywords have special meaning.\n    "
-    [:ul
-     [:li
-      [:code ":any"]
-      " : match any character, like "
+   [:h3
+    "Keywords with special meaning"]
+   [:ul
+    [:li
+     [:code ":any"]
+     [:p "Match any character, like "
       [:code "."]
-      ". Does not match newlines."]
-     [:li [:code ":start"] " match the start of the input"]
-     [:li [:code ":end"] " : match the end of the input"]
-     [:li [:code ":digit"] " : match any digit (" [:code "0-9"] ")"]
-     [:li [:code ":non-digit"] " : match non-digits (not " [:code "0-9"] ")"]
-     [:li [:code ":word"] " : match word characters (" [:code "A-Za-z0-9_"] ")"]
-     [:li
-      [:code ":non-word"]
-      " : match non-word characters (not "
-      [:code "A-Za-z0-9_"]
-      ")"]
-     [:li [:code ":newline"] " : Match " [:code "\\n"]]
-     [:li [:code ":return"] " : Match " [:code "\\r"]]
-     [:li [:code ":tab"] " : Match " [:code "\\t"]]
-     [:li [:code ":form-feed"] " : Match " [:code "\\f"]]
-     [:li
-      [:code ":line-break"]
-      " : Match "
+      ". Does not match newlines."]]
+    [:li [:code ":start"]
+     [:p "Match the start of the input."]]
+    [:li [:code ":end"]
+     [:p "Match the end of the input."]]
+    [:li [:code ":digit"]
+     [:p "Match any digit (" [:code "0-9"] ")."]]
+    [:li [:code ":non-digit"]
+     [:p "Match non-digits (not " [:code "0-9"] ")."]]
+    [:li [:code ":word"]
+     [:p "Match word characters (" [:code "A-Za-z0-9_"] ")."]]
+    [:li
+     [:code ":non-word"]
+     [:p "Match non-word characters (not " [:code "A-Za-z0-9_"] ")."]]
+    [:li [:code ":newline"] [:p "Match " [:code "\\n"] "."]]
+    [:li [:code ":return"] [:p "Match " [:code "\\r"] "."]]
+    [:li [:code ":tab"] [:p "Match " [:code "\\t"] "."]]
+    [:li [:code ":form-feed"] [:p "Match " [:code "\\f"] "."]]
+    [:li
+     [:code ":line-break"]
+     [:p
+      "Match "
       [:code "\\n"]
       ", "
       [:code "\\r"]
       ", "
       [:code "\\r\\n"]
-      ", or other unicode newline characters"]
-     [:li [:code ":alert"] " : match " [:code "\\a"] " (U+0007)"]
-     [:li [:code ":escape"] " : match " [:code "\\e"] " (U+001B)"]
-     [:li
-      [:code ":whitespace"]
-      " : match any whitespace character. Uses "
+      ", or other unicode newline characters."]]
+    [:li [:code ":alert"] [:p "Match " [:code "\\a"] " (U+0007)."]]
+    [:li [:code ":escape"] [:p "Match " [:code "\\e"] " (U+001B)."]]
+    [:li
+     [:code ":whitespace"]
+     [:p
+      "Match any whitespace character. Uses "
       [:code "\\s"]
       " on JavaScript, and\na character range of whitespace characters on Java with equivalent semantics\nas JavaScript "
       [:code "\\s"]
       ", since "
       [:code "\\s"]
-      " in Java only matches ASCII whitespace."]
-     [:li [:code ":non-whitespace"] " : match non-whitespace"]
-     [:li
-      [:code ":vertical-whitespace"]
-      " : match vertical whitespace, including newlines and vertical tabs "
-      [:code "#\"\\n\\x0B\\f\\r\\x85\\u2028\\u2029\""]]
-     [:li
-      [:code ":vertical-tab"]
-      " : match a vertical tab "
-      [:code "\\v"]
-      " (U+000B)"]
-     [:li [:code ":null"] " : match a NULL byte/char"]]]
-   [:li
-    "All other forms are vectors, with the first element being a keyword\n    "
-    [:ul
-     [:li
-      [:code "[:cat forms...]"]
-      " : concatenation, match the given Regal expressions in order"]
-     [:li
-      [:code "[:alt forms...]"]
-      " : alternatives, match one of the given options, like "
-      [:code "(foo|bar|baz)"]]
-     [:li [:code "[:* form]"] " : match the given form zero or more times"]
-     [:li [:code "[:+ form]"] " : match the given form one or more times"]
-     [:li [:code "[:? form]"] " : match the given form zero or one time"]
-     [:li
-      [:code "[:class entries...]"]
-      " : match any of the given characters or ranges, with ranges given as two element vectors. E.g. "
+      " in Java only matches ASCII whitespace."]]
+    [:li [:code ":non-whitespace"] [:p "Match non-whitespace."]]
+    [:li
+     [:code ":vertical-whitespace"]
+     [:p "Match vertical whitespace, including newlines and vertical tabs "
+      [:code "#\"\\n\\x0B\\f\\r\\x85\\u2028\\u2029\""] "."]]
+    [:li
+     [:code ":vertical-tab"] [:p
+                              "Match a vertical tab "
+                              [:code "\\v"]
+                              " (U+000B)."]]
+    [:li [:code ":null"] [:p "Match a NULL byte/char."]]]
+   [:h3
+    "Vectors with a keyword as the first element:"]
+   [:ul
+    [:li
+     [:code "[:cat forms...]"]
+     [:p
+      "Concatenation, match the given Regal expressions in order."]]
+    [:li
+     [:code "[:alt forms...]"]
+     [:p
+      "Alternatives, match one of the given options, like "
+      [:code "(foo|bar|baz)"] "."]]
+    [:li [:code "[:* form]"]
+     [:p "Match the given form zero or more times."]]
+    [:li [:code "[:+ form]"]
+     [:p "Match the given form one or more times."]]
+    [:li [:code "[:? form]"] [:p "Match the given form zero or one time."]]
+    [:li
+     [:code "[:class entries...]"]
+     [:p "Match any of the given characters or ranges, with ranges given as two
+     element vectors. E.g. "
       [:code "[:class [\\a \\z] [\\A \\Z] \"_\" \"-\"]"]
       " is equivalent to "
-      [:code "[a-zA-Z_-]"]]
-     [:li
-      [:code "[:not entries...]"]
-      " : like "
+      [:code "[a-zA-Z_-]"] "."]]
+    [:li
+     [:code "[:not entries...]"]
+     [:p "Like "
       [:code ":class"]
       ", but negates the result, equivalent to "
-      [:code "[^...]"]]
-     [:li
-      [:code "[:repeat form min max]"]
-      " : repeat a form a number of times, like "
-      [:code "{2,5}"]]
-     [:li
-      [:code "[:capture forms...]"]
-      " : capturing group with implicit concatenation of the given forms"]
-     [:li
-      [:code "[:char number]"]
-      " : a single character, denoted by its unicode codepoint"]
-     [:li
-      [:code "[:ctrl char]"]
-      " : a control character, e.g. "
+      [:code "[^...]"] "."]]
+    [:li
+     [:code "[:repeat form min max]"]
+     [:p "Repeat a form a number of times, like "
+      [:code "{2,5}"] "."]]
+    [:li
+     [:code "[:capture forms...]"]
+     [:p
+      "Capturing group with implicit concatenation of the given forms."]]
+    [:li
+     [:code "[:char number]"]
+     [:p
+      "A single character, denoted by its unicode codepoint."]]
+    [:li
+     [:code "[:ctrl char]"]
+     [:p
+      "A control character, e.g. "
       [:code "[:ctrl \\A]"]
       " => "
       [:code "^A"]
       " => "
-      [:code "#\"\\cA\""]]
-     [:li
-      [:code "[:lookahead ...]"]
-      " : match if followed by pattern, without consuming input"]
-     [:li
-      [:code "[:negative-lookahead ...]"]
-      " : match if not followed by pattern"]
-     [:li [:code "[:lookbehind ...]"] " : match if preceded by pattern"]
-     [:li
-      [:code "[:negative-lookbehind ...]"]
-      " : match if not preceded by pattern"]
-     [:li
-      [:code "[:atomic ...]"]
-      " : match without backtracking ("
+      [:code "#\"\\cA\""] "."]]
+    [:li
+     [:code "[:lookahead ...]"]
+     [:p
+      "Match if followed by pattern, without consuming input."]]
+    [:li
+     [:code "[:negative-lookahead ...]"]
+     [:p
+      "Match if not followed by pattern."]]
+    [:li [:code "[:lookbehind ...]"] [:p "Match if preceded by pattern."]]
+    [:li
+     [:code "[:negative-lookbehind ...]"]
+     [:p "Match if not preceded by pattern."]]
+    [:li
+     [:code "[:atomic ...]"]
+     [:p "Match without backtracking ("
       [:a
        {:shape "rect", :href "https://www.regular-expressions.info/atomic.html"}
-       "atomic group"]
-      ")"]]]])
+       "atomic group"] ")."]]]])
 
 (defn app []
   (let [{:keys [regal parse-error? flavor input pattern result gen]} @state]
@@ -301,8 +314,8 @@
       [:div.copy-wrapper.code
 
        [:code
-        "(re-seq #\"" pattern "\", \"" input "\")"]
-       ]
+        "(re-seq #\"" pattern "\", \"" input "\")"]]
+
       [show-result]
       [:div.copy-wrapper
        [:p "But they’re not nearly all as harmless as that wee regex. To get a
@@ -312,7 +325,7 @@
         [fill-with :cats
          "find all the cats in a list of crazy cats"] "; or to "
         [fill-with :password
-         "find the symbols, capital letters or numbers in a given password."] ]
+         "find the symbols, capital letters or numbers in a given password."]]
        [:p "Not bad, right? Getting a good grip on regexes is a good investment
        in your career. But even seasoned programmers, or perhaps especially
        seasoned programmers, know that regex fatigue is real. Writing a
@@ -419,7 +432,7 @@
        [:p "(If you really want the boring list then have a look at the " [:a {:href "#syntax"} "syntax overview.)"]]
 
        [:p "Regal can not just match strings, it can also generate them by
-       turning your regal forms into test.check compatible generators."] ]
+       turning your regal forms into test.check compatible generators."]]
 
       [:label.interactive "Generator"]
       [:div.interactive
@@ -444,7 +457,7 @@
             \"xxx\"
             {:registry {:regal regal-malli/into-schema}})"]]
 
-       [:h2#syntax.title "Syntax overview"]
+       [:h2#syntax "Syntax overview"]
        [cheatsheet]]]]))
 
 (reagent-dom/render
