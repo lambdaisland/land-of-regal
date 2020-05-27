@@ -68,7 +68,9 @@
                   :height "100%"}
     [:textarea {:height "9rem"}]]
    [:label.regal-form {:color :darkslategray
-                       :font-weight 900}]
+                       :font-weight 900
+                       :white-space :nowrap
+                       :padding-top "1.3rem"}]
    [:.interactive {:background-color "#eee"
                    :padding "1em"
                    :box-sizing :border-box

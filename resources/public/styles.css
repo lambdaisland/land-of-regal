@@ -135,6 +135,8 @@ ul ul {
 label.regal-form {
   color: darkslategray;
   font-weight: 900;
+  white-space: nowrap;
+  padding-top: 1.3rem;
 }
 
 .interactive {
