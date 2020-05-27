@@ -89,7 +89,9 @@ p {
 }
 
 input[type="text"] {
-  border: none;
+  border: 1px solid gainsboro;
+  padding: .3rem .3rem .3rem 0;
+  max-width: 65ch;
   width: 100%;
 }
 
@@ -98,10 +100,11 @@ a {
 }
 
 label {
-  align-self: center;
+  align-self: auto;
   color: gray;
   grid-column-start: 1;
   text-align: right;
+  padding-top: .3rem;
   font-variant: all-small-caps;
   font-family: ff-meta-serif-web-pro;
 }
@@ -138,11 +141,13 @@ label.regal-form {
   background-color: #eee;
   padding: 1em;
   box-sizing: border-box;
+  max-width: max-content;
 }
 
 textarea {
-  width: 65ch;
+  width: 63ch;
   box-sizing: border-box;
+  padding: .3rem;
   border: none;
 }
 
@@ -156,6 +161,34 @@ li code {
   white-space: nowrap;
 }
 
-.flavor label {
+.generator {
+  border: 1px solid gainsboro;
+  padding: .3rem .3rem .3rem 0;
+  margin-top: 0;
+  max-width: 65ch;
+}
+
+.flavors {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.flavors label {
   color: initial;
+}
+
+.layout > article > label:nth-child(8) {
+  padding-top: 0;
+}
+
+input[type="radio"] {
+  vertical-align: text-bottom;
+}
+
+.flavor {
+  display: contents;
+}
+
+.flavor label {
+  padding-top: 0;
 }

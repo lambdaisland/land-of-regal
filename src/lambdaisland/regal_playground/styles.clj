@@ -47,13 +47,16 @@
    [:h2 {:margin-top "3rem"}]
    [:h3 {:font-size "1.2rem"}]
    [:p {:font-size "1.125rem" :max-width "65ch"}]
-   ["input[type=\"text\"]" {:border :none
+   ["input[type=\"text\"]" {:border "1px solid gainsboro"
+                            :padding ".3rem .3rem .3rem 0"
+                            :max-width "65ch"
                             :width "100%"}]
    [:a {:text-decoration :none}]
-   [:label {:align-self :center
+   [:label {:align-self :auto
             :color :gray
             :grid-column-start "1"
             :text-align :right
+            :padding-top ".3rem"
             :font-variant :all-small-caps
             :font-family "ff-meta-serif-web-pro"}]
    [:ul {:list-style "inside circle"
@@ -68,12 +71,24 @@
                        :font-weight 900}]
    [:.interactive {:background-color "#eee"
                    :padding "1em"
-                   :box-sizing :border-box}]
-   [:textarea {:width "65ch"
+                   :box-sizing :border-box
+                   :max-width :max-content}]
+   [:textarea {:width "63ch"
                :box-sizing :border-box
+               :padding ".3rem"
                :border :none}]
    [:li [:p {:padding-left "1rem"
              :margin-top ".2rem"
              :margin-bottom ".5rem"}]]
    [:li [:code {:white-space "nowrap"}]]
-   [:.flavor [:label {:color :initial}]]])
+   [:.generator {:border "1px solid gainsboro"
+                 :padding ".3rem .3rem .3rem 0"
+                 :margin-top 0
+                 :max-width "65ch"}]
+   [:.flavors {:display :flex
+               :margin-bottom "1rem"}
+    [:label {:color :initial}]]
+   [".layout > article > label:nth-child(8)" {:padding-top 0}]
+   ["input[type=\"radio\"]" {:vertical-align :text-bottom}]
+   [:.flavor {:display :contents}
+    [:label {:padding-top 0}]]])
