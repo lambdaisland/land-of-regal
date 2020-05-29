@@ -1,12 +1,10 @@
-.layout {
-  max-width: max-content;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr minmax(auto, 90ch) 1fr;
+html {
+  font: 1rem/1.6 "ff-meta-serif-web-pro", serif;
+  box-sizing: border-box;
 }
 
-.layout > * {
-  max-width: 98vw;
+* {
+  box-sizing: inherit;
 }
 
 @font-face {
@@ -15,84 +13,44 @@
 }
 
 code, textarea, input {
-  font-family: JetBrainsMono Regular;
-  font-weight: 600;
-  font-size: 1rem;
+  font: 600 1rem/1.6 "JetBrainsMono Regular", monospace;
+  white-space: pre-wrap;
 }
 
-h1, h2, h3, p, a {
-  font-family: ff-meta-serif-web-pro;
-  font-weight: 500;
-  line-height: 1.6;
+main {
+  max-width: max-content;
+  margin: 0 auto;
 }
 
 article {
-  margin-top: 10rem;
-  display: grid;
   grid-template-columns: auto 1fr;
   grid-column-gap: 1rem;
+  margin-top: 1rem;
+}
+
+article > :not(label) {
   grid-column-start: 2;
 }
 
-h1, h2, h3, p, input, img, ul, .copy-wrapper {
-  grid-column-start: 2;
+@media (min-width: 768px) {
+
+  article {
+    display: grid;
+    margin-top: 10rem;
+  }
+
 }
 
-.code {
-  margin: 1.125rem 0;
-}
-
-label {
-  height: 100%;
-}
-
-pre {
-  overflow: hidden;
-}
-
-.logo {
-  grid-column-start: 3;
-  grid-row: 7/span 3;
-}
-
-.title, .subtitle, h2, h3 {
+h1, h2, h3, label {
   font-variant: all-small-caps;
 }
 
-.title {
-  font-size: 1.5rem;
-  margin-top: 5rem;
-  margin-bottom: .8rem;
-}
-
-.subtitle {
-  font-size: 1.3rem;
-  display: inline-block;
-  margin: 0;
-}
-
-.title, .subtitle, h2, h3 {
-  font-weight: bold;
-}
-
-h2 {
-  margin-top: 3rem;
-}
-
-h3 {
-  font-size: 1.2rem;
+h1 {
+  font-size: 1.75rem;
 }
 
 p {
-  font-size: 1.125rem;
   max-width: 65ch;
-}
-
-input[type="text"] {
-  border: 1px solid gainsboro;
-  padding: .3rem .3rem .3rem 0;
-  max-width: 65ch;
-  width: 100%;
 }
 
 a {
@@ -100,13 +58,14 @@ a {
 }
 
 label {
-  align-self: auto;
-  color: gray;
-  grid-column-start: 1;
   text-align: right;
-  padding-top: .3rem;
-  font-variant: all-small-caps;
-  font-family: ff-meta-serif-web-pro;
+  padding: 2px 0;
+  color: darkslategray;
+}
+
+input[type="text"] {
+  border: 1px solid  gainsboro;
+  width: 100%;
 }
 
 ul {
@@ -114,12 +73,27 @@ ul {
   padding-left: 0;
 }
 
-ul ul {
-  padding-left: 1em;
+.flavors {
+  display: flex;
+  margin-bottom: 1rem;
 }
 
-.area {
-  display: none;
+.flavors label {
+  color: initial;
+  font-variant: normal;
+  padding-right: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+input[type="radio"] {
+  vertical-align: text-top;
+}
+
+.interactive {
+  background-color: #eee;
+  padding: 1rem;
+  box-sizing: border-box;
+  min-width: max-content;
 }
 
 .regal-form {
@@ -130,67 +104,20 @@ ul ul {
 
 .regal-form textarea {
   height: 9rem;
-}
-
-label.regal-form {
-  color: darkslategray;
-  font-weight: 900;
-  white-space: nowrap;
-  padding-top: 1.3rem;
-}
-
-.interactive {
-  background-color: #eee;
-  padding: 1em;
-  box-sizing: border-box;
-  max-width: max-content;
-}
-
-textarea {
-  width: 63ch;
-  box-sizing: border-box;
-  padding: .3rem;
+  width: 100%;
   border: none;
-}
-
-li p {
-  padding-left: 1rem;
-  margin-top: .2rem;
-  margin-bottom: .5rem;
-}
-
-li code {
-  white-space: nowrap;
 }
 
 .generator {
   border: 1px solid gainsboro;
-  padding: .3rem .3rem .3rem 0;
-  margin-top: 0;
   max-width: 65ch;
 }
 
-.flavors {
-  display: flex;
-  margin-bottom: 1rem;
+li p {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
 }
 
-.flavors label {
-  color: initial;
-}
-
-.layout > article > label:nth-child(8) {
-  padding-top: 0;
-}
-
-input[type="radio"] {
-  vertical-align: text-bottom;
-}
-
-.flavor {
-  display: contents;
-}
-
-.flavor label {
-  padding-top: 0;
+li code {
+  white-space: no-wrap;
 }

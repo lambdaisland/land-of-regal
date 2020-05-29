@@ -121,7 +121,7 @@
 (defn- show-result []
   [:<>
    [:label "Result"]
-   [:code (pprint-str (:result @state))]])
+   [:p [:code (pprint-str (:result @state))]]])
 
 (defn cheatsheet []
   [:<>
@@ -312,8 +312,9 @@
                                         :result "")))))))}]]
       [:div.copy-wrapper.code
 
-       [:code
-        "(re-seq #\"" pattern "\", \"" input "\")"]]
+       [:p
+        [:code
+         "(re-seq #\"" pattern "\", \"" input "\")"]]]
 
       [show-result]
       [:div.copy-wrapper
@@ -377,26 +378,25 @@
        we emit a Java regex. If you use it on ClojureScript, you get a
        JavaScript regex. Sometimes these will differ, but they will match the
        exact same inputs."]]
-      [:section.flavor
-       [:label "Flavor"]
-       [:div.flavors
-        (for [f [:ecma :java8 :java9]]
-          ^{:key (str f)}
-          [:div
-           [:input (cond-> {:type "radio"
-                            :id (name f)
-                            :value (name f)
-                            :name "flavor"
-                            :on-change (fn [_]
-                                         (swap! state #(-> %
-                                                           (assoc :flavor f)
-                                                           derive-pattern
-                                                           derive-result)))}
-                     (= f flavor)
-                     (assoc :checked true))]
-           [:label {:for (name f)} ({:ecma  "JavaScript"
-                                     :java8 "Java 8"
-                                     :java9 "Java 9"} f)]])]]
+      [:label "Flavor"]
+      [:div.flavors
+       (for [f [:ecma :java8 :java9]]
+         ^{:key (str f)}
+         [:div
+          [:input (cond-> {:type "radio"
+                           :id (name f)
+                           :value (name f)
+                           :name "flavor"
+                           :on-change (fn [_]
+                                        (swap! state #(-> %
+                                                          (assoc :flavor f)
+                                                          derive-pattern
+                                                          derive-result)))}
+                    (= f flavor)
+                    (assoc :checked true))]
+          [:label {:for (name f)} ({:ecma  "JavaScript"
+                                    :java8 "Java 8"
+                                    :java9 "Java 9"} f)]])]
       [:label "Resulting Regex"]
       [:div
        [:input {:type  "text"
