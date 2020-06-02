@@ -14,6 +14,7 @@
                        :margin-top (rem 10)
                        :border-top 'none}]
             [:code :textarea :input {:font-size (rem 1)}]
+            [:h1 :h2 :h3 {:line-height 'revert}]
             [:label.regal-form {:bottom (rem 0.5)
                                 :border-top-right-radius 0
                                 :border-bottom-right-radius 0}]
@@ -36,15 +37,32 @@
               :grid-column-gap (rem 1)
               :margin (rem 2)}
     ["> :not(label)" {:grid-column-start 2}]]
+   [:h1 :h2 :h3 {:line-height 1
+                 :margin-bottom 0}]
    [:h1 :h2 :h3 :label {:font-variant :all-small-caps}]
    [:h1 {:font-size (rem 1.75)}]
-   [:.copy-wrapper {:hyphens 'auto}]
-   [:p {:max-width (ch 65)}]
+   [:p {:color "#222"
+        :max-width (ch 65)
+        :hyphens 'auto}]
+   [:.introduction {:font-size (rem 1.07)
+                    :hyphens 'none
+                    :line-height 1.5
+                    :max-width (ch 60)}
+    ["spam:first-of-type" {:font-weight 'bold}]]
    [:a {:text-decoration 'none}]
    [:label {:text-align 'right
             :padding "2px 0"
-            :color 'darkslategray}]
-   ["input[type=\"text\"]" {:border "1px solid  gainsboro"
+            :color 'darkslategray}
+    [:+ [:p {:border "1px solid gainsboro"
+             :height (rem 7)
+             :margin ".2rem 0"
+             :overflow 'scroll}]]]
+   [:.logo {:float 'right
+            :margin-top (rem -1)
+            :margin-left (rem 2)
+            :shape-outside "circle(121px at 137px 86px)"
+            :width (u/percent 30)}]
+   ["input[type=\"text\"]" {:border "1px solid darkgray"
                             :width (u/percent 100)}]
    [:ul {:list-style "inside circle"
          :padding-left 0}]
@@ -80,12 +98,14 @@
                 :width (u/percent 100)
                 :padding 0}]]
    [:.generator {:border "1px solid gainsboro"
-                 :max-width (ch 65)}]
+                 :margin-top 0
+                 :max-width (ch 65)
+                 :padding-left (rem 0.5)}]
    [:li
     [:p {:padding-left (rem 1)
          :margin-top (rem 0.25)}]
     [:code {:white-space 'no-wrap}]]
-   [:button {:border "2px solid gainsboro"
+   [:button {:border "2px solid darkslategray"
              :padding ".2rem .5rem"}]
    enable-grid])
 
