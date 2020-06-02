@@ -264,7 +264,7 @@
     [:main.layout
      [:article
       [:div.copy-wrapper
-       [:p "Greetings, wanderer. You have reached the gates
+       [:p.introduction [:spam "Greetings, wanderer"] ". You have reached the gates
         of " [:strong "Regal"] ", a library for the programming languages
         Clojure and ClojureScript. This scroll you are reading is an interactive
         explainer. And this here below is a text field. Go ahead, change it!"]]
@@ -342,15 +342,15 @@
        only distant cousins at best."]]
 
       [:div.copy-wrapper
+       [:h1.title "Regal"]
+       #_[:p.subtitle "Royally reified regular expressions"]
        [:img.logo
-        {:src "images/02_crown@32x32@10x.png"}]]
-      [:h1.title "Regal"]
-      #_[:p.subtitle "Royally reified regular expressions"]
-      [:p
-       "As Clojure people, when we have to deal with powerful dark arts (looking
+        {:src "images/02_crown@32x32@10x.png"}]
+       [:p
+        "As Clojure people, when we have to deal with powerful dark arts (looking
        at you, HTML) with not so great markup formats, we know what to do: just
        cast them as pure Clojure data structures! The result of applying that
-       sorcery to regexes is Regal."]
+       sorcery to regexes is Regal."]]
       [:label.regal-form.interactive "Regal form"]
       [:div.regal-form.interactive
        [:textarea {:value regal
