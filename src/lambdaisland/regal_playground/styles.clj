@@ -1,4 +1,5 @@
 (ns lambdaisland.regal-playground.styles
+  (:refer-clojure :exclude [rem])
   (:require [garden.stylesheet :refer [at-font-face at-media]]
             [garden.units :as u :refer [rem ch]]))
 
@@ -108,4 +109,3 @@
    [:button {:border "2px solid darkslategray"
              :padding ".2rem .5rem"}]
    enable-grid])
-

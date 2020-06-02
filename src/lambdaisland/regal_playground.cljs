@@ -7,7 +7,6 @@
             [reagent.dom :as reagent-dom]
             [clojure.pprint :as pprint]))
 
-
 (defn pprint-str [form]
   (with-out-str
     (pprint/pprint form)))
@@ -16,7 +15,8 @@
   (try
     (reader/read-string form)
     (catch :default e
-      (js/console.error e))))
+      #_(js/console.error e)
+      nil)))
 
 (defn regal-form [state]
   (try-read (:regal state)))
@@ -97,7 +97,8 @@
                  (assoc :input content
                         :regal (pprint-str form))
                  derive-result
-                 derive-pattern)))))
+                 derive-pattern
+                 generate-values)))))
 
 (defn- main-input []
   (let [input (:input @state)]
@@ -301,8 +302,8 @@
                              (try
                                (-> state
                                    (assoc
-                                    :regal (pprint-str (parse/parse-pattern text))
-                                    :pattern text)
+                                     :regal (pprint-str (parse/parse-pattern text))
+                                     :pattern text)
                                    derive-result
                                    generate-values)
                                (catch :default e
@@ -378,25 +379,41 @@
        we emit a Java regex. If you use it on ClojureScript, you get a
        JavaScript regex. Sometimes these will differ, but they will match the
        exact same inputs."]]
+      [:div.copy-wrapper
+       [:p "Try for instance "
+        (into [:<>]
+              (->> (for [token [:whitespace :line-break :alert :escape :vertical-whitespace]]
+                     [:a {:href "#" :on-click (fn [^js e]
+                                                (.preventDefault e)
+                                                (swap! state #(-> %
+                                                                  (assoc :regal (str token)
+                                                                         :parse-error? false)
+                                                                  derive-pattern
+                                                                  derive-result
+                                                                  generate-values)))}
+                      (str token)])
+                   (interpose ", ")))
+        " and see how the resulting regex is different for Java then for JavaScript."]]
       [:label "Flavor"]
       [:div.flavors
        (for [f [:ecma :java8 :java9]]
          ^{:key (str f)}
          [:div
-          [:input (cond-> {:type "radio"
-                           :id (name f)
-                           :value (name f)
-                           :name "flavor"
-                           :on-change (fn [_]
-                                        (swap! state #(-> %
-                                                          (assoc :flavor f)
-                                                          derive-pattern
-                                                          derive-result)))}
-                    (= f flavor)
-                    (assoc :checked true))]
+          [:input {:type "radio"
+                   :id (name f)
+                   :value (name f)
+                   :name "flavor"
+                   :on-change (fn [_]
+                                (swap! state #(-> %
+                                                  (assoc :flavor f)
+                                                  derive-pattern
+                                                  derive-result)))
+                   :checked (= f flavor)}]
           [:label {:for (name f)} ({:ecma  "JavaScript"
                                     :java8 "Java 8"
                                     :java9 "Java 9"} f)]])]
+
+
       [:label "Resulting Regex"]
       [:div
        [:input {:type  "text"
@@ -409,8 +426,8 @@
                              (try
                                (-> state
                                    (assoc
-                                    :regal (pprint-str (parse/parse-pattern text))
-                                    :pattern text)
+                                     :regal (pprint-str (parse/parse-pattern text))
+                                     :pattern text)
                                    derive-result
                                    generate-values)
                                (catch :default e
