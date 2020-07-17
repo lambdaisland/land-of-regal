@@ -1,6 +1,7 @@
 html {
   font: 1rem/1.6 "ff-meta-serif-web-pro", serif;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 * {
@@ -22,19 +23,62 @@ body {
 }
 
 main {
+  margin-top: 10rem;
+}
+
+article {
   max-width: max-content;
   margin: 0 auto;
 }
 
-article {
-  border-top: 2px solid black;
-  grid-template-columns: auto 1fr;
+aside {
+  max-width: max-content;
+  margin: 1rem auto;
+}
+
+.gridded {
+  grid-template-columns: 120px 1fr;
   grid-column-gap: 1rem;
   margin: 2rem;
 }
 
-article > :not(label) {
+.gridded > :not(label):not(#lioss-logo) {
   grid-column-start: 2;
+}
+
+#lioss-logo {
+  margin-right: 2rem;
+}
+
+#credits {
+  background: linear-gradient(135deg, #f2deb0 0%, #efb775 100%);
+  padding: 0.5rem 0;
+}
+
+#syntax-overview {
+  background: linear-gradient(135deg, #eff1fc 0%, #b2b8d3 100%);
+  padding: 0.5rem 0;
+}
+
+.focus-mode article p, .focus-mode article svg, .focus-mode article h1 {
+  height: 0;
+  margin: 0;
+  visibility: hidden;
+  transition: height 1s, margin 1s;
+}
+
+#focus-mode-slider {
+  position: fixed;
+  bottom: 0.5rem;
+  right: 0.5rem;
+}
+
+#focus-mode-slider span {
+  display: inline-block;
+  position: relative;
+  top: -0.6rem;
+  margin-right: 0.5rem;
+  font-variant: all-small-caps;
 }
 
 h1, h2, h3 {
@@ -87,9 +131,6 @@ label + p {
 .logo {
   float: right;
   margin-top: -1rem;
-  margin-left: 2rem;
-  shape-outside: circle(121px at 137px 86px);
-  width: 30%;
 }
 
 input[type="text"] {
@@ -170,9 +211,8 @@ button {
     font-size: 1.125rem;
   }
   
-  article {
+  .gridded {
     display: grid;
-    margin-top: 10rem;
     border-top: none;
   }
   
