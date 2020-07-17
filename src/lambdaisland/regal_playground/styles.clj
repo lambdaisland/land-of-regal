@@ -11,9 +11,8 @@
 (def enable-grid
   (at-media {:min-width (u/px 768)}
             [:html {:font-size (rem 1.125)}]
-            [:article {:display 'grid
-                       :margin-top (rem 10)
-                       :border-top 'none}]
+            [:.gridded {:display 'grid
+                        :border-top 'none}]
             [:code :textarea :input {:font-size (rem 1)}]
             [:h1 :h2 :h3 {:line-height 'revert}]
             [:label.regal-form {:bottom (rem 0.5)
@@ -31,13 +30,15 @@
    [:code :textarea :input {:font "600 .9rem/1.6 \"JetBrainsMono Regular\", monospace"
                             :white-space 'pre-wrap}]
    [:body {:margin 0}]
-   [:main {:max-width 'max-content
-           :margin "0 auto"}]
-   [:article {:border-top "2px solid black"
-              :grid-template-columns "auto 1fr"
-              :grid-column-gap (rem 1)
-              :margin (rem 2)}
+   [:main {:margin-top (rem 10)}]
+   [:article :aside {:max-width 'max-content
+                     :margin "0 auto"}]
+   [:.gridded {:border-top "2px solid black"
+               :grid-template-columns "120px 1fr"
+               :grid-column-gap (rem 1)
+               :margin (rem 2)}
     ["> :not(label)" {:grid-column-start 2}]]
+   [:#credits {:background "linear-gradient(135deg, #f2deb0 0%, #efb775 100%)"}]
    [:h1 :h2 :h3 {:line-height 1
                  :margin-bottom 0}]
    [:h1 :h2 :h3 :label {:font-variant :all-small-caps}]

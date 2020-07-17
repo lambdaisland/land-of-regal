@@ -1,6 +1,6 @@
 {:paths ["src" "resources"]
- :deps  {lambdaisland/regal {:git/url "https://github.com/lambdaisland/regal"
-                             :sha     "605e3efbf1a9510fbe973ad953fd06fcea0d4d90"}
+ :deps  {lambdaisland/regal {:local/root "/home/arne/github/lambdaisland/regal"}
+         #_{:git/url "https://github.com/lambdaisland/regal" :sha "605e3efbf1a9510fbe973ad953fd06fcea0d4d90"}
 
          reagent                     {:mvn/version "1.0.0-alpha2"}
          thheller/shadow-cljs        {:mvn/version "2.10.15"}
