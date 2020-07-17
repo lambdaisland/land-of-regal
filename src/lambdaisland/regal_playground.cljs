@@ -43,9 +43,8 @@
 
 (defn derive-result [state]
   (let [result (try
-                 (re-seq (compiled-regex state) (:input state))
+                 (doall (re-seq (compiled-regex state) (:input state)))
                  (catch :default e
-                   (js/console.error e)
                    "Error!"))]
     (assoc state :result result)))
 
@@ -63,6 +62,7 @@
 (defonce state
   (let [form [:+ :word]]
     (reagent/atom (-> {:regal        (pprint-str form)
+                       :focus-mode?  false
                        :flavor       :ecma
                        :parse-error? false
                        :input        "Royally Reified Regular Expressions"
@@ -122,16 +122,34 @@
                              (.preventDefault e)
                              (swap-example! type))} description])
 
+(defn focus-mode-slider []
+  [:div#focus-mode-slider
+   [:span "Focus mode"]
+   [:label.switch {:for "checkbox"}
+    [:input#checkbox {:type "checkbox"
+                      :on-change #(do
+                                    (when (.. % -target -checked)
+                                      (js/window.scrollTo #js {:top 0 :left 0 :behavior "smooth"}))
+                                    (swap! state assoc :focus-mode? (.. % -target -checked))
+                                    (js/setTimeout
+                                     (fn [] (set! js/document.body.scrollTop 0))
+                                     250)
+                                    )
+                      :checked (:focus-mode? @state)}]
+    [:div.slider.round]]] )
+
+
+
 (defn- show-result []
   [:<>
    [:label "Result"]
-   [:p [:code (pprint-str (:result @state))]]])
+   [:output [:code (pprint-str (:result @state))]]])
 
 (defn article []
   (let [{:keys [regal parse-error? flavor input pattern result gen]} @state]
     [:div.gridded
      [:div.copy-wrapper
-      [:p.introduction [:spam "Greetings, wanderer"] ". You have reached the gates
+      [:p.introduction [:span "Greetings, wanderer"] ". You have reached the gates
         of " [:strong "Regal"] ", a library for the programming languages
         Clojure and ClojureScript. This scroll you are reading is an interactive
         explainer. And this here below is a text field. Go ahead, change it!"]]
@@ -179,10 +197,13 @@
                                        :result "")))))))}]]
      [:div.copy-wrapper
       [:p "Let's see what it makes of the input you gave earlier."]]
+     [:label "Code"]
      [:div.copy-wrapper.code
-      [:p
+      [:output
        [:code
-        (pprint-str (list 're-seq (regal/compile pattern) input))
+        (pprint-str (list 're-seq (try (regal/compile pattern)
+                                       (catch js/Error _
+                                         'invalid-regex)) input))
         ]]]
 
      [show-result]
@@ -213,8 +234,8 @@
      [:div.copy-wrapper
       [:h1.title "Regal"]
       #_[:p.subtitle "Royally reified regular expressions"]
-      [:img.logo
-       {:src "images/02_crown@32x32@10x.png"}]
+      [:div.logo
+       {:dangerouslySetInnerHTML {:__html (inline-resource "public/regal_logo.svg")}}]
       [:p
        "As Clojure people, when we have to deal with powerful dark arts (looking
        at you, HTML) with not so great markup formats, we know what to do: just
@@ -341,23 +362,26 @@
 (defn credits []
   [:div.gridded
    [:div.copy-wrapper
-    [:h2 "Thank you for making it this far!"]
+    [:h2 "About us"]]
+   [:div#lioss-logo
+    {:dangerouslySetInnerHTML {:__html (inline-resource "public/lioss_logo_captioned.svg")}}]
+   [:div.copy-wrapper
     [:p "Regal is proudly brought to you by the people at "
-     [:a {:href "http://gaiwan.co"} "Gaiwan"], " a small agency creating
+     [:a {:href "http://gaiwan.co"} "Gaiwan"] ", a small agency creating
          bespoke software built on strong foundations."]
     [:p "We also create educational materials for programmers under the "
      [:a {:href "https://lambdaisland.com"} "Lambda Island"] " banner, "
-     "and give back to the Clojure Community through "
+     "and give back to the Community through "
      [:a {:href "https://opencollective.com/lambda-island"}
-      "Lambda Island Open Source."]
+      "Lambda Island Open Source."] " "
      "If you like what we do then please consider supporting our work."]
-    [:p "This Regal interactive explainer was made by Felipe Barros and Arne
+    [:p "This interactive explainer was created by Felipe Barros and Arne
    Brasseur, with artwork by Stefanie Moertel." ]]])
 
 (defn cheatsheet []
   [:div.gridded
    [:div.copy-wrapper
-    [:h2#syntax "Syntax overview"]
+    [:h2#syntax "Regal Syntax overview"]
     [:p
      "Strings and characters match literally. They are escaped, so "
      [:code "."]
@@ -493,20 +517,16 @@
         "atomic group"] ")."]]]]])
 
 (defn app []
-  [:main
+  [:main {:class (if (:focus-mode? @state) "focus-mode" "")}
    [:article
     [article]]
    [:div#credits
     [:aside
      [credits]]]
-   [:aside#syntax-overview
-
-    [cheatsheet]]])
-
-;; {:dangerouslySetInnerHTML {:__html (pprint-str doc)}}
-
-(inline-resource "public/lioss_logo_captioned.svg")
-;; (in "public/lioss_logo_captioned.svg")
+   [:div#syntax-overview
+    [:aside
+     [cheatsheet]]]
+   [focus-mode-slider]])
 
 (reagent-dom/render
  [app]

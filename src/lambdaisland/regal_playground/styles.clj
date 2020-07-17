@@ -24,21 +24,44 @@
 (def ^{:garden {:output-to "resources/public/styles.css"}}
   main
   [[:html {:font "1rem/1.6 \"ff-meta-serif-web-pro\", serif"
-           :box-sizing 'border-box}]
+           :box-sizing 'border-box
+           :scroll-behavior 'smooth}]
    [:* {:box-sizing 'inherit}]
    jet-brains-mono-regular
    [:code :textarea :input {:font "600 .9rem/1.6 \"JetBrainsMono Regular\", monospace"
                             :white-space 'pre-wrap}]
    [:body {:margin 0}]
    [:main {:margin-top (rem 10)}]
-   [:article :aside {:max-width 'max-content
-                     :margin "0 auto"}]
-   [:.gridded {:border-top "2px solid black"
+   [:article  {:max-width 'max-content
+               :margin "0 auto"}]
+   [:aside {:max-width 'max-content
+            :margin "1rem auto"}]
+   [:.gridded {
                :grid-template-columns "120px 1fr"
                :grid-column-gap (rem 1)
                :margin (rem 2)}
-    ["> :not(label)" {:grid-column-start 2}]]
-   [:#credits {:background "linear-gradient(135deg, #f2deb0 0%, #efb775 100%)"}]
+    ["> :not(label):not(#lioss-logo)" {:grid-column-start 2}]]
+   [:#lioss-logo {:margin-right (rem 2)}]
+   [:#credits {:background "linear-gradient(135deg, #f2deb0 0%, #efb775 100%)"
+               :padding "0.5rem 0"}]
+   [:#syntax-overview {:background "linear-gradient(135deg, #eff1fc 0%, #b2b8d3 100%)"
+                       :padding "0.5rem 0"}]
+   [:.focus-mode
+    [:article
+     [:p :svg :h1
+      {:height 0
+       :margin 0
+       :visibility "hidden"
+       :transition "height 1s, margin 1s"}]]]
+
+   [:#focus-mode-slider {:position "fixed"
+                         :bottom "0.5rem"
+                         :right "0.5rem"}
+    [:span {:display "inline-block"
+            :position "relative"
+            :top "-0.6rem"
+            :margin-right "0.5rem"
+            :font-variant :all-small-caps}]]
    [:h1 :h2 :h3 {:line-height 1
                  :margin-bottom 0}]
    [:h1 :h2 :h3 :label {:font-variant :all-small-caps}]
@@ -61,9 +84,7 @@
              :overflow 'scroll}]]]
    [:.logo {:float 'right
             :margin-top (rem -1)
-            :margin-left (rem 2)
-            :shape-outside "circle(121px at 137px 86px)"
-            :width (u/percent 30)}]
+            }]
    ["input[type=\"text\"]" {:border "1px solid darkgray"
                             :width (u/percent 100)}]
    [:ul {:list-style "inside circle"
