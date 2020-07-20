@@ -5,7 +5,8 @@
             [lambdaisland.regal.parse :as parse]
             [reagent.core :as reagent]
             [reagent.dom :as reagent-dom]
-            [clojure.pprint :as pprint])
+            [clojure.pprint :as pprint]
+            [clojure.string :as str])
   (:require-macros [lambdaisland.regal-playground.macros :as m :refer [inline-resource]]))
 
 
@@ -260,10 +261,10 @@
                                         :regal text
                                         :pattern ""
                                         :parse-error? true
-                                        :result ""))))))}]
-      (when parse-error?
-        [:p "Parse error!"])]
+                                        :result ""))))))}]]
      [:div.copy-wrapper
+      (when (and (not (str/blank? regal)) parse-error?)
+        [:pre "Parse error!"])
       [:p "This regal form has fixed semantics. If you use it on Clojure then
        we emit a Java regex. If you use it on ClojureScript, you get a
        JavaScript regex. Sometimes these will differ, but they will match the
@@ -357,7 +358,12 @@
 
       [:p "How that works, and much more, is explained in the "
        [:a {:href "https://github.com/lambdaisland/regal"}
-        "project's README."]]]]))
+        "project's README."]]
+
+      [:p "If you want to let us know what cool things you are doing with Regal
+      then come and find us in the #lambdaisland channel "
+       [:a {:href "http://clojurians.net/"} " on Clojurians Slack."]]
+      [:p [:em "Thank you for visiting the " [:span.land-of-regal "Land of Regal"]] "."]]]))
 
 (defn credits []
   [:div.gridded

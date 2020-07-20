@@ -60,6 +60,10 @@ aside {
   padding: 0.5rem 0;
 }
 
+.land-of-regal {
+  font-variant: all-small-caps;
+}
+
 .focus-mode article p, .focus-mode article svg, .focus-mode article h1 {
   height: 0;
   margin: 0;

@@ -46,6 +46,7 @@
                :padding "0.5rem 0"}]
    [:#syntax-overview {:background "linear-gradient(135deg, #eff1fc 0%, #b2b8d3 100%)"
                        :padding "0.5rem 0"}]
+   [:.land-of-regal {:font-variant :all-small-caps}]
    [:.focus-mode
     [:article
      [:p :svg :h1
